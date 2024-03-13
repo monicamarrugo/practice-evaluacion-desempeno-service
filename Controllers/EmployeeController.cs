@@ -1,0 +1,45 @@
+﻿using EvaluacionDesempenoApi.Services.DTOs;
+using EvaluacionDesempenoApi.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EvaluacionDesempenoApi.Controllers
+{
+    [Route("/api/[controller]")]
+    public class EmployeeController : ControllerBase
+    {
+        private IEmployeeService _employeeService;
+
+        public EmployeeController(IEmployeeService employeeService)
+        {
+            _employeeService = employeeService;
+        }
+
+        [HttpGet("listEmployees")]
+        public IActionResult GetListPreguntas()
+        {
+            var employees = this._employeeService.GetAllEmployees();
+            return Ok(employees);
+        }
+
+        [HttpPost("saveEmployee")]
+        public IActionResult SaveEmployee([FromBody] EmployeeDto employeeData)
+        {
+            var respuestaInscripcion = this._employeeService.SaveEmployee(employeeData);
+            return Ok(respuestaInscripcion);
+        }
+
+        [HttpPost("updateEmployee")]
+        public IActionResult UpdateEmployee([FromBody] EmployeeDto employeeData)
+        {
+            var respuestaInscripcion = this._employeeService.UpdatelEmployee(employeeData);
+            return Ok(respuestaInscripcion);
+        }
+
+        [HttpGet("GetById")]
+        public IActionResult GetById([FromQuery] int id)
+        {
+            var question = this._employeeService.GetById(id);
+            return Ok(question);
+        }
+    }
+}
