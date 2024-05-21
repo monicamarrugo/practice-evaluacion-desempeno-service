@@ -1,5 +1,7 @@
+using AutoMapper;
 using EvaluacionDesempenoApi.Data.Context;
 using EvaluacionDesempenoApi.Data.Repositories;
+using EvaluacionDesempenoApi.Mappers;
 using EvaluacionDesempenoApi.Services;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +22,14 @@ public class Program
             .WriteTo.File(new RenderedCompactJsonFormatter(), "logs/log.txt")
             .CreateLogger();
 
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
+
+        IMapper mapper = new Mapper(mapperConfig);
+       
+
         try
         {
             Log.Information("Starting up");
@@ -37,15 +47,25 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         // Add services to the container.
         builder.Services.AddControllers();
+        builder.Services.AddSingleton(mapper);
         builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         builder.Services.AddScoped(typeof(IQuestionRepository), typeof(QuestionRepository));
         builder.Services.AddScoped(typeof(IEmployeeRepository), typeof(EmployeeRepository));
+        builder.Services.AddScoped(typeof(IQuestionariesConfigRepository), typeof(QuestionariesConfigRepository));
+        builder.Services.AddScoped(typeof(IQuestionaryRepository), typeof(QuestionaryRepository));
+        builder.Services.AddScoped(typeof(IEvaluationRepository), typeof(EvaluationRepository));
         builder.Services.AddScoped<IQuestionTypeService, QuestionTypeService>();
         builder.Services.AddScoped<IQuestionService, QuestionService>();
         builder.Services.AddScoped<IGroupService, GroupService>();
         builder.Services.AddScoped<IEmployeeService, EmployeeService>();
         builder.Services.AddScoped<IDivisionService, DivisionService>();
         builder.Services.AddScoped<IPositionService, PositionService>();
+        builder.Services.AddScoped<IEscaleService, EscaleService>();
+        builder.Services.AddScoped<IAreaService, AreaService>();
+        builder.Services.AddScoped<IQuestionariesConfigService, QuestionariesConfigService>();
+        builder.Services.AddScoped<IQuestionaryService, QuestionaryService>();
+        builder.Services.AddScoped<IQuestionaryTypeService, QuestionaryTypeService>();
+        builder.Services.AddScoped<IEvaluationService, EvaluationService>();
 
         builder.Services.AddDbContext<ApplicationDbContext>();
         builder.Services.AddCors(options => {

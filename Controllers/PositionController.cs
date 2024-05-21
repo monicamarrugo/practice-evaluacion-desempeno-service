@@ -21,6 +21,12 @@ namespace EvaluacionDesempenoApi.Controllers
             return Ok(positions);
         }
 
+        [HttpGet("listPositionsAsEvaluation")]
+        public IActionResult GetListPositionsAsEvaluation()
+        {
+            var positions = this._positionService.GetAllPositionsAsEvaluation();
+            return Ok(positions);
+        }
 
     }
 }

@@ -6,6 +6,8 @@
         T GetById(int id);
         Task AddAsync(T entity);
         void Add(T entity);
+        int Add2(T entity);
+        void AddRange(List<T> entities);
         Task UpdateAsync(T entity);
         void Update(T entity);
         Task DeleteAsync(T entity);

@@ -24,9 +24,30 @@ namespace EvaluacionDesempenoApi.Controllers
         }
 
         [HttpGet("listQuestions")]
-        public IActionResult GetListPreguntas()
+        public IActionResult GetListQuestion()
         {
             var tipos = this._questionService.GetAllQuestions();
+            return Ok(tipos);
+        }
+
+        [HttpGet("listQuestionsByType")]
+        public IActionResult GetListQuestionByType(string questionType)
+        {
+            var tipos = this._questionService.GetQuestionsByType(questionType);
+            return Ok(tipos);
+        }
+
+        [HttpGet("listQuestionsByArea")]
+        public IActionResult GetListQuestionByArea(string area)
+        {
+            var tipos = this._questionService.GetQuestionsByArea(area);
+            return Ok(tipos);
+        }
+
+        [HttpGet("listQuestionsByGroup")]
+        public IActionResult GetListQuestionByGroup(int group)
+        {
+            var tipos = this._questionService.GetQuestionsByGroup(group);
             return Ok(tipos);
         }
 

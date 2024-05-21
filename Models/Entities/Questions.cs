@@ -18,18 +18,19 @@ namespace EvaluacionDesempenoApi.Models.Entities
         public string? NameEN { get; set; }
         public string? DescriptionES { get; set; }
         public string? DescriptionEN { get; set; }
-        public int? Value { get; set; }
-        public string? Control { get; set; }
-
-        public string? displayFormats { get; set; }
         public bool Enabled { get; set; }
-        public bool ApplyScale { get; set; }
         public string? CreateUser { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? ModifiedUser { get; set; }
         public DateTime? ModifiedDate { get; set; }
 
+        public string? CdArea { get; set; }
+        public Areas Areas { get; set; }
+
         [JsonIgnore]
         public ICollection<QuestionGroupRelation> QuestionGroupRelations { get; set; }
+
+        [JsonIgnore]
+        public ICollection<QuestionariesConfig> QuestionariesConfig { get; set; }
     }
 }

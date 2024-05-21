@@ -27,5 +27,8 @@ namespace EvaluacionDesempenoApi.Models.Entities
 
         [JsonIgnore]
         public ICollection<Employees> Subordinates { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Questionaries> Questionaries { get; set; }
     }
 }

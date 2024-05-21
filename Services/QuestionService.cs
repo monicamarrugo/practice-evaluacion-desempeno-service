@@ -1,4 +1,5 @@
-﻿using EvaluacionDesempenoApi.Data.Repositories;
+﻿using AutoMapper;
+using EvaluacionDesempenoApi.Data.Repositories;
 using EvaluacionDesempenoApi.Models.Entities;
 using EvaluacionDesempenoApi.Services.DTOs;
 using EvaluacionDesempenoApi.Services.Interfaces;
@@ -13,14 +14,17 @@ namespace EvaluacionDesempenoApi.Services
         private readonly IGenericRepository<Formats> _formatsRepository;
         private readonly IQuestionRepository _questionRepository;
         private readonly IGenericRepository<QuestionGroupRelation> _questionGroupRelationRepository;
+        private readonly IMapper mapper;
 
         public QuestionService(IGenericRepository<Questions> genericRepository, IQuestionRepository questionRepository,
-            IGenericRepository<QuestionGroupRelation> questionGroupRelationRepository, IGenericRepository<Formats> formatsRepository)
+            IGenericRepository<QuestionGroupRelation> questionGroupRelationRepository, IGenericRepository<Formats> formatsRepository,
+            IMapper _mapper)
         {
             _genericRepository = genericRepository;
             _questionRepository = questionRepository;
             _questionGroupRelationRepository = questionGroupRelationRepository;
             _formatsRepository = formatsRepository;
+            mapper = _mapper;
         }
 
         public void DisableQuestion()
@@ -37,23 +41,23 @@ namespace EvaluacionDesempenoApi.Services
                 var entity = _questionRepository.GetByIdIncludes(id);
                 if(entity != null)
                 {
-
+                    //mapper.Map<QuestionDto>(valorIndice);
                     question.idQuestion = entity.IdQuestions;
                     question.idGroups = entity.QuestionGroupRelations.Count > 0 ?
                         entity.QuestionGroupRelations.FirstOrDefault().Groups.IdGroups : 0;
                     question.idQuestionGroup = entity.QuestionGroupRelations.Count > 0 ?
                         entity.QuestionGroupRelations.FirstOrDefault().IdQuestionGroupRelation : 0;
                     question.idQuestionType = entity.IdQuestionType;
-                    question.groupName = entity.QuestionGroupRelations.Count > 0 ?
+                    question.groupNameES = entity.QuestionGroupRelations.Count > 0 ?
                         entity.QuestionGroupRelations.FirstOrDefault().Groups.NameES : "Ninguno...";
+                    question.groupNameEN = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().Groups.NameEN : "Ninguno...";
                     question.descriptionES = entity.DescriptionES;
                     question.descriptionEN = entity.DescriptionEN;
                     question.nameES = entity.NameES;
                     question.nameEN = entity.NameEN;
-                    question.value = entity.Value;
-                    question.control = entity.Control;
-                    question.displayFormats = entity.displayFormats;
                     question.idFormats = entity.IdFormats;
+                    question.cdArea = entity.CdArea;
 
                 }
 
@@ -81,16 +85,16 @@ namespace EvaluacionDesempenoApi.Services
                     idQuestionGroup = entity.QuestionGroupRelations.Count > 0 ?
                         entity.QuestionGroupRelations.FirstOrDefault().IdQuestionGroupRelation : 0,
                     idQuestionType = entity.IdQuestionType,
-                    groupName = entity.QuestionGroupRelations.Count > 0 ?
+                    groupNameES = entity.QuestionGroupRelations.Count > 0 ?
                         entity.QuestionGroupRelations.FirstOrDefault().Groups.NameES : "Ninguno...",
+                    groupNameEN = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().Groups.NameEN : "Ninguno...",
                     descriptionES = entity.DescriptionES,
                     descriptionEN = entity.DescriptionEN,
                     idFormats = entity.IdFormats,
                     nameES = entity.NameES,
                     nameEN = entity.NameEN,
-                    value = entity.Value,
-                    control = entity.Control,
-                    displayFormats = entity.displayFormats
+                    cdArea = entity.CdArea
                 });
             }
             return questions;
@@ -107,13 +111,10 @@ namespace EvaluacionDesempenoApi.Services
                     IdFormats = question.idQuestionType == 1? 4: question.idFormats.Value,
                     DescriptionEN = question.descriptionEN,
                     DescriptionES = question.descriptionES,
+                    CdArea = question.cdArea,
                     NameES = question.nameES,
                     NameEN = question.nameEN,
-                    Value = question.value,
-                    Control = question.control,
-                    displayFormats = question.displayFormats,
                     Enabled = true,
-                    ApplyScale = question.idQuestionType == 1?true:false,
                     CreateDate = DateTime.Now
                 };
                 if (question.idGroups !=null && question.idGroups != 0)
@@ -158,18 +159,15 @@ namespace EvaluacionDesempenoApi.Services
                     DescriptionES = question.descriptionES,
                     NameES = question.nameES,
                     NameEN = question.nameEN,
-                    Value = question.value,
-                    Control = question.control,
-                    displayFormats = question.displayFormats,
+                    CdArea = question.cdArea,
                     Enabled = true,
-                    ApplyScale = true,
                     CreateDate= DateTime.Now,
                     ModifiedDate = DateTime.Now
                 };
             
-                if(question.idGroups != 0)
+                if(question.idGroups != 0 && question.idGroups != null)
                 {
-                    if (question.idQuestionGroup != 0)
+                    if (question.idQuestionGroup != 0 && question.idQuestionGroup != null)
                     {
                         QuestionGroupRelation
                         questionGroupRelation = new QuestionGroupRelation()
@@ -197,7 +195,7 @@ namespace EvaluacionDesempenoApi.Services
                 }
                 else
                 {
-                    if (question.idQuestionGroup != 0)
+                    if (question.idQuestionGroup != 0 && question.idQuestionGroup != null)
                     {
                         QuestionGroupRelation
                         questionGroupRelation = new QuestionGroupRelation()
@@ -240,6 +238,97 @@ namespace EvaluacionDesempenoApi.Services
                 });
             }
             return formats;
+        }
+
+        List<QuestionDto> IQuestionService.GetQuestionsByType(string questionType)
+        {
+            List<QuestionDto> questions = new List<QuestionDto>();
+            var entities = _questionRepository.GetByType(questionType);
+
+            foreach (var entity in entities)
+            {
+                questions.Add(new QuestionDto()
+                {
+                    idQuestion = entity.IdQuestions,
+                    idGroups = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().Groups.IdGroups : 0,
+                    idQuestionGroup = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().IdQuestionGroupRelation : 0,
+                    idQuestionType = entity.IdQuestionType,
+                    groupNameES = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().Groups.NameES : "Ninguno...",
+                    groupNameEN = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().Groups.NameEN : "Ninguno...",
+                    descriptionES = entity.DescriptionES,
+                    descriptionEN = entity.DescriptionEN,
+                    idFormats = entity.IdFormats,
+                    nameES = entity.NameES,
+                    nameEN = entity.NameEN,
+                    cdArea = entity.CdArea
+                });
+            }
+            return questions;
+        }
+
+        List<QuestionDto> IQuestionService.GetQuestionsByGroup(int group)
+        {
+            List<QuestionDto> questions = new List<QuestionDto>();
+            var entities = _questionRepository.GetByGroup(group);
+
+            foreach (var entity in entities)
+            {
+                questions.Add(new QuestionDto()
+                {
+                    idQuestion = entity.IdQuestions,
+                    idGroups = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().Groups.IdGroups : 0,
+                    idQuestionGroup = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().IdQuestionGroupRelation : 0,
+                    idQuestionType = entity.IdQuestionType,
+                    groupNameES = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().Groups.NameES : "Ninguno...",
+                    groupNameEN = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().Groups.NameEN : "Ninguno...",
+                    descriptionES = entity.DescriptionES,
+                    descriptionEN = entity.DescriptionEN,
+                    idFormats = entity.IdFormats,
+                    nameES = entity.NameES,
+                    nameEN = entity.NameEN,
+                    cdArea = entity.CdArea
+                });
+            }
+            return questions;
+        }
+
+        List<QuestionDto> IQuestionService.GetQuestionsByArea(string area)
+        {
+            List<QuestionDto> questions = new List<QuestionDto>();
+            var entities = _questionRepository.GetByArea(area);
+
+            foreach (var entity in entities)
+            {
+                questions.Add(new QuestionDto()
+                {
+                    idQuestion = entity.IdQuestions,
+                    idGroups = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().Groups.IdGroups : 0,
+                    idQuestionGroup = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().IdQuestionGroupRelation : 0,
+                    idQuestionType = entity.IdQuestionType,
+                    groupNameES = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().Groups.NameES : "Ninguno...",
+                    groupNameEN = entity.QuestionGroupRelations.Count > 0 ?
+                        entity.QuestionGroupRelations.FirstOrDefault().Groups.NameEN : "Ninguno...",
+                    descriptionES = entity.DescriptionES,
+                    descriptionEN = entity.DescriptionEN,
+                    idFormats = entity.IdFormats,
+                    nameES = entity.NameES,
+                    nameEN = entity.NameEN,
+                    cdArea = entity.CdArea,
+                    nameArea = entity.Areas != null?entity.Areas.NameArea:null
+                });
+            }
+            return questions;
         }
     }
 }

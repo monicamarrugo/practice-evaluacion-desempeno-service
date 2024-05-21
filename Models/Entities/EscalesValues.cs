@@ -9,6 +9,7 @@ namespace EvaluacionDesempenoApi.Models.Entities
         [Key]
         public int IdEscalesValues { get; set; }
         public int IdEscales { get; set; }
+        public Escales Escales { get; set; }
         public string Value { get; set; }
         public string NameValue { get; set; }
         public bool IndOrder { get; set; }

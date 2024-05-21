@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace EvaluacionDesempenoApi.Models.Entities
 {
@@ -18,5 +19,7 @@ namespace EvaluacionDesempenoApi.Models.Entities
 
         public Questions Questions { get; set; }
         public Groups Groups { get; set; }
+
+       
     }
 }

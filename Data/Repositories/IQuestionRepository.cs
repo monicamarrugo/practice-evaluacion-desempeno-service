@@ -6,5 +6,8 @@ namespace EvaluacionDesempenoApi.Data.Repositories
     {
         List<Questions> GetAllIncludes();
         public Questions GetByIdIncludes(int id);
+        public List<Questions> GetByType(string questionType);
+        public List<Questions> GetByGroup(int idGroup);
+        public List<Questions> GetByArea(string area);
     }
 }

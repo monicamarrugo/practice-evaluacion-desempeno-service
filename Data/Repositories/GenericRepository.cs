@@ -1,5 +1,6 @@
 ﻿using EvaluacionDesempenoApi.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EvaluacionDesempenoApi.Data.Repositories
 {
@@ -45,6 +46,17 @@ namespace EvaluacionDesempenoApi.Data.Repositories
              _dbContext.Set<T>().Add(entity);
             _dbContext.SaveChanges();
         }
+        public void AddRange(List<T> entities)
+        {
+            _dbContext.Set<T>().AddRange(entities);
+            _dbContext.SaveChanges();
+        }
+        public int Add2(T entity)
+        {
+            _dbContext.Set<T>().Add(entity);
+            var id = _dbContext.SaveChanges();
+            return id;
+        }
 
         public void Update(T entity)
         {
@@ -55,6 +67,12 @@ namespace EvaluacionDesempenoApi.Data.Repositories
         public void Delete(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
+            _dbContext.SaveChanges();
+        }
+
+        public void DeleteRange(List<T> entities)
+        {
+            _dbContext.Set<T>().RemoveRange(entities);
             _dbContext.SaveChanges();
         }
     }
