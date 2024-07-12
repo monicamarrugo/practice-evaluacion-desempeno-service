@@ -26,31 +26,7 @@ namespace EvaluacionDesempenoApi.Services
             List<QuestionariesConfigDto> configs = new List<QuestionariesConfigDto>();
             var entities = _questionariesConfigRepository.GetByQuestionaryIncludes(idQuestionary);
 
-            foreach (var entity in entities)
-            {
-                configs.Add(new QuestionariesConfigDto()
-                {
-                    idQuestionaryConfig = entity.IdQuestionaryConfig,
-                    idQuestionary = entity.IdQuestionary,
-                    idQuestions = entity.IdQuestions,
-                    nameQuestionES = entity.Questions.NameES,
-                    nameQuestionEN = entity.Questions.NameEN,
-                    descriptionQuestionES = entity.Questions.DescriptionES,
-                    descriptionQuestionEN = entity.Questions.DescriptionEN,
-                    idGroups = entity.Questions.QuestionGroupRelations.Count > 0 ?
-                        entity.Questions.QuestionGroupRelations.FirstOrDefault().Groups.IdGroups : 0,
-                    groupNameES = entity.Questions.QuestionGroupRelations.Count > 0 ?
-                        entity.Questions.QuestionGroupRelations.FirstOrDefault().Groups.NameES : "Ninguno...",
-                    groupNameEN = entity.Questions.QuestionGroupRelations.Count > 0 ?
-                        entity.Questions.QuestionGroupRelations.FirstOrDefault().Groups.NameEN : "Ninguno...",
-                    cdArea = entity.Questions.CdArea != null? entity.Questions.CdArea: null,
-                    nameArea = entity.Questions.Areas != null ? entity.Questions.Areas.NameArea:null,
-                    incentive = entity.Incentive != null ? entity.Incentive.Value: 0,
-                    weight = entity.Weight,
-                    noApplyScale = entity.NoApplyScale,
-                    control = entity.Control
-                });
-            }
+            configs = _mapper.Map<List<QuestionariesConfigDto>>(entities);
             return configs;
         }
         public CreateQuestionaryConfigDto GetCompleteByQuestionary(int idQuestionary)
@@ -67,36 +43,11 @@ namespace EvaluacionDesempenoApi.Services
             questionary.cdQuestionaryType = firstElement.Questionary.CdQuestionaryType;
             questionary.name = firstElement.Questionary.Name;
             questionary.cdArea = firstElement.Questionary.CdArea;
-            questionary.iDProcessLeader = firstElement.Questionary.IDProcessLeader;
             questionary.idQuestionary = firstElement.IdQuestionary;
             questionary.createDate = firstElement.Questionary.CreateDate;
             questionary.createUser = firstElement.Questionary.CreateUser;
 
-            foreach (var entity in entities)
-            {
-                configs.Add(new QuestionariesConfigDto()
-                {
-                    idQuestionaryConfig = entity.IdQuestionaryConfig,
-                    idQuestionary = entity.IdQuestionary,
-                    idQuestions = entity.IdQuestions,
-                    nameQuestionES = entity.Questions.NameES,
-                    nameQuestionEN = entity.Questions.NameEN,
-                    descriptionQuestionES = entity.Questions.DescriptionES,
-                    descriptionQuestionEN = entity.Questions.DescriptionEN,
-                    idGroups = entity.Questions.QuestionGroupRelations.Count > 0 ?
-                        entity.Questions.QuestionGroupRelations.FirstOrDefault().Groups.IdGroups : 0,
-                    groupNameES = entity.Questions.QuestionGroupRelations.Count > 0 ?
-                        entity.Questions.QuestionGroupRelations.FirstOrDefault().Groups.NameES : "Ninguno...",
-                    groupNameEN = entity.Questions.QuestionGroupRelations.Count > 0 ?
-                        entity.Questions.QuestionGroupRelations.FirstOrDefault().Groups.NameEN : "Ninguno...",
-                    cdArea = entity.Questions.CdArea != null ? entity.Questions.CdArea : null,
-                    nameArea = entity.Questions.Areas != null ? entity.Questions.Areas.NameArea : null,
-                    incentive = entity.Incentive != null ? entity.Incentive.Value : 0,
-                    weight = entity.Weight,
-                    noApplyScale = entity.NoApplyScale,
-                    control = entity.Control
-                });
-            }
+            configs = _mapper.Map<List<QuestionariesConfigDto>>(entities);
             configCreate.questionary = questionary;
             configCreate.questionariesConfig = configs;
             return configCreate;

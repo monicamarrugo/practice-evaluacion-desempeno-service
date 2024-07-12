@@ -5,14 +5,16 @@ namespace EvaluacionDesempenoApi.Services.Interfaces
 {
     public interface IEvaluationService
     {
-        public List<EvaluationsDto> GetAllEvaluations();
-        public EvaluationsDto GetEvaluationsById(int idEvaluations);
+        List<EvaluationsDto> GetAllEvaluations();
+        EvaluationsDto GetEvaluationsById(int idEvaluations);
 
-        public EvaluationCreateDto GetEvaluationsByIdInclude(int idEvaluations);
-        public List<EvaluationsDto> GetActiveEvaluation();
+        EvaluationCreateDto GetEvaluationsByIdInclude(int idEvaluations);
+        ActiveEvaluationsDto GetActiveEvaluation(SearchActiveEvaluationDto dataSearch);
 
         ResponseTransaction SaveEvaluation(EvaluationCreateDto evaluationData);
 
         ResponseTransaction UpdateEvaluation(EvaluationCreateDto evaluationData);
+
+        ResponseTransaction EnableEvaluation(EvaluationCreateDto evaluationData);
     }
 }

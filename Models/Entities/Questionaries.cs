@@ -15,8 +15,6 @@ namespace EvaluacionDesempenoApi.Models.Entities
 
         public QuestionaryTypes QuestionaryTypes { get; set;}
       
-        public int? IDProcessLeader { get; set; }
-
         public string? CreateUser { get; set;}
         public DateTime? CreateDate { get; set;}
         public string? ModifiedUser { get; set;}
@@ -25,7 +23,6 @@ namespace EvaluacionDesempenoApi.Models.Entities
         [JsonIgnore]
         public ICollection<QuestionariesConfig> QuestionariesConfig { get; set; }
 
-        public Employees Employees { get; set; }
         public Areas Area { get; set; }
 
         [JsonIgnore]

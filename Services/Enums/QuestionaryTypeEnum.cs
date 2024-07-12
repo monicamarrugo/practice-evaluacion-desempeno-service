@@ -3,11 +3,11 @@
     public enum QuestionaryTypeEnum
     {
         [StringValue("AUTO")]
-        AutoEvaluacion,
+        AutoEvaluation,
         [StringValue("EVAL")]
-        Evaluacion,
+        Evaluation,
         [StringValue("KPI")]
-        Indicadores
+        Indicators
     }
     public class StringValueAttribute : Attribute
     {

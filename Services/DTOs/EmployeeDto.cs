@@ -18,5 +18,7 @@ namespace EvaluacionDesempenoApi.Services.DTOs
         public string? nameDivisions { get; set; }
         public string identification { get; set; }
         public bool enabled { get; set; }
+
+        public bool applyEvaluations { get; set; }
     }
 }

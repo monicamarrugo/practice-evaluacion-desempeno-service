@@ -15,9 +15,23 @@ namespace EvaluacionDesempenoApi.Controllers
         }
 
         [HttpGet("listEmployees")]
-        public IActionResult GetListPreguntas()
+        public IActionResult GetListEmployees()
         {
             var employees = this._employeeService.GetAllEmployees();
+            return Ok(employees);
+        }
+
+        [HttpGet("listEmployeesByResponsible")]
+        public IActionResult GetListEmployeesByResponsible(int idResponsible)
+        {
+            var employees = this._employeeService.GetAllEmployeesByResponsible(idResponsible);
+            return Ok(employees);
+        }
+
+        [HttpPost("listEmployeesEvaluations")]
+        public IActionResult GetEmployeesEvaluations([FromBody]  SearchEmployeesDto dataSearch)
+        {
+            var employees = this._employeeService.GetEmployeesEvaluations(dataSearch);
             return Ok(employees);
         }
 

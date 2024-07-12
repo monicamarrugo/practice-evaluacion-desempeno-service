@@ -1,4 +1,5 @@
-﻿using EvaluacionDesempenoApi.Services;
+﻿using EvaluacionDesempenoApi.Models.Entities;
+using EvaluacionDesempenoApi.Services;
 using EvaluacionDesempenoApi.Services.DTOs;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,13 @@ namespace EvaluacionDesempenoApi.Controllers
         public IActionResult GetListEvaluations()
         {
             var evaluations = this._evaluationService.GetAllEvaluations();
+            return Ok(evaluations);
+        }
+
+        [HttpPost("listActiveEvaluations")]
+        public IActionResult GetListActiveEvaluations([FromBody] SearchActiveEvaluationDto dataSearch)
+        {
+            var evaluations = this._evaluationService.GetActiveEvaluation(dataSearch);
             return Ok(evaluations);
         }
 
@@ -51,6 +59,13 @@ namespace EvaluacionDesempenoApi.Controllers
         public IActionResult UpdateEvaluation([FromBody] EvaluationCreateDto evaluationData)
         {
             var responseUpdate = this._evaluationService.UpdateEvaluation(evaluationData);
+            return Ok(responseUpdate);
+        }
+
+        [HttpPost("enableEvaluation")]
+        public IActionResult EnableEvaluation([FromBody] EvaluationCreateDto evaluationData)
+        {
+            var responseUpdate = this._evaluationService.EnableEvaluation(evaluationData);
             return Ok(responseUpdate);
         }
 

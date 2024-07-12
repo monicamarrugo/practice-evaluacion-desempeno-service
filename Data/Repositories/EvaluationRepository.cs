@@ -2,6 +2,7 @@
 using EvaluacionDesempenoApi.Data.Context;
 using EvaluacionDesempenoApi.Models.Entities;
 using EvaluacionDesempenoApi.Services.DTOs;
+using EvaluacionDesempenoApi.Services.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace EvaluacionDesempenoApi.Data.Repositories
@@ -15,16 +16,27 @@ namespace EvaluacionDesempenoApi.Data.Repositories
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public List<Evaluations> GetActiveEvaluations(DateTime current)
+        public List<Evaluations> GetActiveEvaluations(SearchActiveEvaluationDto dataSearch)
         {
             return _dbContext.Evaluations
-                .Where(e => current >= e.StartDate && current <= e.EndDate && e.IndEnabled.GetValueOrDefault()).ToList();
+                .Include(e => e.EvaluationsPositions)
+                .Where(e =>
+                            (e.IndEnabled == true)
+                            &&
+                            ((e.StartDate == null) || (dataSearch.currentDate >= e.StartDate) && (dataSearch.currentDate <= e.EndDate))
+                            &&
+                            ((e.IDProcessLeader == null) || (e.IDProcessLeader == dataSearch.idProcessLeader))
+                            &&
+                            ((e.CdDivisions == null) || (e.CdDivisions == dataSearch.cdDivisions))
+                        )
+                .ToList();
         }
 
         public IQueryable<Evaluations> GetEvaluationsInclude()
         {
             return _dbContext.Evaluations
                 .Include(e => e.Questionaries)
+                .Include(l => l.Employees)
                 .AsQueryable();
         }
 
@@ -32,8 +44,16 @@ namespace EvaluacionDesempenoApi.Data.Repositories
         {
             return _dbContext.Evaluations
                 .Include(e => e.EvaluationsPositions)
+                .Include(l => l.Employees)
                 .Where(ev => ev.IdEvaluations == idEvaluations)
                 .FirstOrDefault();
+        }
+        public void EnableEvaluation(EvaluationCreateDto evaluationData)
+        {
+            var evaluation = _mapper.Map<Evaluations>(evaluationData.evaluation);
+            evaluation.ModifiedDate = DateTime.Now;
+            _dbContext.Evaluations.Update(evaluation);
+            _dbContext.SaveChanges();
         }
 
         public void UpdateEvaluation(EvaluationCreateDto evaluationData)
@@ -42,31 +62,34 @@ namespace EvaluacionDesempenoApi.Data.Repositories
             evaluation.ModifiedDate = DateTime.Now;
             _dbContext.Evaluations.Update(evaluation);
 
-            
-            // Recuperar los cargos relacionados a la evaluacion 
-            var currentPositions = _dbContext.EvaluationsPositions
-                .Where(p => p.IdEvaluations == evaluation.IdEvaluations).ToList();
-
-            // Actualizar las posiciones existentes y agregar las nuevas
-            foreach (var uPosition in evaluationData.evaluationPosition)
+            if (evaluationData.evaluation.cdTypeEvaluation != QuestionaryTypeEnum.Indicators.GetStringValue())
             {
-                var existingPosition = currentPositions.FirstOrDefault(q => q.IdPosition == uPosition.idPosition);
-                var positiion = _mapper.Map<EvaluationsPositions>(uPosition);
-                if (existingPosition == null)
+                // Recuperar los cargos relacionados a la evaluacion 
+                var currentPositions = _dbContext.EvaluationsPositions
+                    .Where(p => p.IdEvaluations == evaluation.IdEvaluations).ToList();
+
+                // Actualizar las posiciones existentes y agregar las nuevas
+                foreach (var uPosition in evaluationData.evaluationPosition)
                 {
-                    // Agregar la nueva posicion
-                    _dbContext.EvaluationsPositions.Add(positiion);
+                    var existingPosition = currentPositions.FirstOrDefault(q => q.IdPosition == uPosition.idPosition);
+                    var positiion = _mapper.Map<EvaluationsPositions>(uPosition);
+                    if (existingPosition == null)
+                    {
+                        // Agregar la nueva posicion
+                        _dbContext.EvaluationsPositions.Add(positiion);
+                    }
+                }
+
+                // Eliminar las posiciones existentes que no están en la lista nueva
+                foreach (var existingPosition in currentPositions)
+                {
+                    if (!evaluationData.evaluationPosition.Any(q => q.idPosition == existingPosition.IdPosition))
+                    {
+                        _dbContext.EvaluationsPositions.Remove(existingPosition);
+                    }
                 }
             }
 
-            // Eliminar las posiciones existentes que no están en la lista nueva
-            foreach (var existingPosition in currentPositions)
-            {
-                if (!evaluationData.evaluationPosition.Any(q => q.idPosition == existingPosition.IdPosition))
-                {
-                    _dbContext.EvaluationsPositions.Remove(existingPosition);
-                }
-            }
             _dbContext.SaveChanges();
         }
     }

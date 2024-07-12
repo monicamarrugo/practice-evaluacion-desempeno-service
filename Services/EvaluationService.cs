@@ -3,6 +3,7 @@ using Azure;
 using EvaluacionDesempenoApi.Data.Repositories;
 using EvaluacionDesempenoApi.Models.Entities;
 using EvaluacionDesempenoApi.Services.DTOs;
+using EvaluacionDesempenoApi.Services.Enums;
 using EvaluacionDesempenoApi.Services.Interfaces;
 
 namespace EvaluacionDesempenoApi.Services
@@ -22,13 +23,20 @@ namespace EvaluacionDesempenoApi.Services
         }
 
 
-        public List<EvaluationsDto> GetActiveEvaluation()
+        public ActiveEvaluationsDto GetActiveEvaluation(SearchActiveEvaluationDto dataSearch)
         {
             List<Evaluations> entities = new List<Evaluations>();
             List<EvaluationsDto> evaluations = new List<EvaluationsDto>();
-            entities = _evaluationsRepository.GetActiveEvaluations(DateTime.Now);
+            ActiveEvaluationsDto activeEvaluationsDto = new ActiveEvaluationsDto();
+            entities = _evaluationsRepository.GetActiveEvaluations(dataSearch);
             evaluations = _mapper.Map<List<EvaluationsDto>>(entities);
-            return evaluations;
+            activeEvaluationsDto.evaluations = evaluations;
+            activeEvaluationsDto.numTotalEvaluations = entities.Count;
+            activeEvaluationsDto.numPerformanceEvaluations = entities
+                                   .Where(e => e.CdTypeEvaluation == QuestionaryTypeEnum.Evaluation.GetStringValue()).Count();
+            activeEvaluationsDto.numIndicadorsEvaluations = entities
+                                  .Where(e => e.CdTypeEvaluation == QuestionaryTypeEnum.Indicators.GetStringValue()).Count();
+            return activeEvaluationsDto;
         }
 
         public List<EvaluationsDto> GetAllEvaluations()
@@ -113,6 +121,32 @@ namespace EvaluacionDesempenoApi.Services
             try
             {
                 _evaluationsRepository.UpdateEvaluation(evaluationData);
+                response.error = "NO";
+                response.message = "La Evaluación fue actualizada exitosamente!";
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                response.error = "SI";
+                response.errorDetail = ex.Message;
+                return response;
+            }
+        }
+
+        public ResponseTransaction EnableEvaluation(EvaluationCreateDto evaluationData)
+        {
+            ResponseTransaction response = new ResponseTransaction();
+            if (evaluationData == null || evaluationData.evaluation == null)
+            {
+
+                response.error = "SI";
+                response.errorDetail = "Faltan datos de la evaluación";
+                return response;
+            }
+            try
+            {
+                _evaluationsRepository.EnableEvaluation(evaluationData);
                 response.error = "NO";
                 response.message = "La Evaluación fue actualizada exitosamente!";
                 return response;

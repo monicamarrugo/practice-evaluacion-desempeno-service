@@ -13,9 +13,11 @@ namespace EvaluacionDesempenoApi.Models.Entities
         public string Title { get; set;}
         public int? IdEscales { get; set;}
         public string? CdDivisions { get; set;}
+        public string? CdTypeEvaluation { get; set; }
         public DateTimeOffset? StartDate { get; set;}
         public DateTimeOffset? EndDate { get; set;}
         public int? Year { get; set;}
+        public int? IDProcessLeader { get; set; }
         public bool? IndApplyEB { get; set;}
         public bool? IndEnabled { get; set;}
         public string? CreateUser { get; set;}
@@ -26,6 +28,7 @@ namespace EvaluacionDesempenoApi.Models.Entities
         public Escales Escales { get; set; }
         public Divisions Divisions { get; set; }
         public Questionaries Questionaries { get; set; }
+        public Employees Employees { get; set; }
 
         [JsonIgnore]
         public ICollection<EvaluationsPositions> EvaluationsPositions { get; set; }

@@ -56,6 +56,11 @@ namespace EvaluacionDesempenoApi.Data.Context
                     .HasForeignKey(m => m.IdPosition);
 
                 modelBuilder.Entity<Evaluations>()
+                   .HasOne(m => m.Employees)
+                   .WithMany(e => e.Questionaries)
+                   .HasForeignKey(m => m.IDProcessLeader);
+
+                modelBuilder.Entity<Evaluations>()
                   .HasOne(d => d.Questionaries)
                   .WithMany(t => t.Evaluations)
                   .HasForeignKey(d => d.IdQuestionary);
@@ -96,11 +101,6 @@ namespace EvaluacionDesempenoApi.Data.Context
                   .WithMany(e => e.Questionaries)
                   .HasForeignKey(m => m.CdArea);
 
-
-                modelBuilder.Entity<Questionaries>()
-                   .HasOne(m => m.Employees)
-                   .WithMany(e => e.Questionaries)
-                   .HasForeignKey(m => m.IDProcessLeader);
 
                 modelBuilder.Entity<Questionaries>()
                     .HasOne(e => e.QuestionaryTypes)

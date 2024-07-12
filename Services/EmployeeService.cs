@@ -1,4 +1,5 @@
-﻿using EvaluacionDesempenoApi.Data.Repositories;
+﻿using AutoMapper;
+using EvaluacionDesempenoApi.Data.Repositories;
 using EvaluacionDesempenoApi.Models.Entities;
 using EvaluacionDesempenoApi.Services.DTOs;
 using EvaluacionDesempenoApi.Services.Interfaces;
@@ -10,37 +11,43 @@ namespace EvaluacionDesempenoApi.Services
     {
         private readonly IGenericRepository<Employees> _employeesGenericRepository;
         private readonly IEmployeeRepository _employeesRepository;
-
-        public EmployeeService(IEmployeeRepository employeesRepository, IGenericRepository<Employees> employeesGenericRepository)
+        private readonly IMapper _mapper;
+        public EmployeeService(IEmployeeRepository employeesRepository, IGenericRepository<Employees> employeesGenericRepository,
+            IMapper mapper)
         {
             _employeesRepository = employeesRepository;
             _employeesGenericRepository = employeesGenericRepository;
+            _mapper = mapper;
         }
 
         public List<EmployeeDto> GetAllEmployees()
         {
             List<EmployeeDto> employees = new List<EmployeeDto>();
             var entities = _employeesRepository.GetAllIncludes();
+            employees = _mapper.Map<List<EmployeeDto>>(entities);
+            return employees;
+        }
 
-            foreach (var entity in entities)
-            {
-                employees.Add(new EmployeeDto()
+        public List<EmployeeDto> GetAllEmployeesByResponsible(int idResponsible)
+        {
+            List<EmployeeDto> employees = new List<EmployeeDto>();
+            var entities = _employeesRepository.GetAllIncludesByResponsible(idResponsible);
+            employees = _mapper.Map<List<EmployeeDto>>(entities);
+            return employees;
+        }
+
+        public List<EmployeeDto> GetEmployeesEvaluations(SearchEmployeesDto data)
+        {
+            List<EmployeeDto> employees = new List<EmployeeDto>();
+            var entities = _employeesRepository.GetAllIncludesByResponsible(data.idResponsible);
+            employees = _mapper.Map<List<EmployeeDto>>(entities);
+            employees.ForEach(e => {
+                if ((data.cdDivisions == null || e.cdDivisions == data.cdDivisions) 
+                && (data.idPositions.Count == 0 || data.idPositions.Any( p => p.idPosition == e.idPosition)))
                 {
-                    idEmployees = entity.IdEmployees,
-                    idPosition = entity.IdPosition,
-                    namePosition = entity.Positions.NamePosition,
-                    names = entity.Names,
-                    lastNames = entity.LastNames,
-                    sex = entity.Sex,
-                    email = entity.Email,
-                    iDResponsible = entity.IDResponsible != null? entity.IDResponsible.Value:null,
-                    nameResponsible = entity.Responsible != null ? entity.Responsible.Names +" "+ entity.Responsible.LastNames : null,
-                    cdDivisions = entity.CdDivisions,
-                    nameDivisions = entity.Divisions.Name,
-                    identification = entity.Identification,
-                    enabled = entity.Enabled
-                });
-            }
+                    e.applyEvaluations = true;
+                }
+            });
             return employees;
         }
 

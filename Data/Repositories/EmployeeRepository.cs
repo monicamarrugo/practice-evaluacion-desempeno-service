@@ -17,6 +17,13 @@ namespace EvaluacionDesempenoApi.Data.Repositories
             return _dbContext.Employees.Include(p => p.Positions)
                 .Include(d => d.Divisions).Include(s => s.Responsible).ToList();
         }
+        public List<Employees> GetAllIncludesByResponsible(int idResponsible)
+        {
+            return _dbContext.Employees.Include(p => p.Positions)
+                .Include(d => d.Divisions)
+                .Where(e => e.IDResponsible == idResponsible && e.Enabled == true)
+                .ToList();
+        }
 
         public Employees GetByIdIncludes(int id)
         {

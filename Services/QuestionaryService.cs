@@ -123,7 +123,6 @@ namespace EvaluacionDesempenoApi.Services
                     Name = questionaryConfig.questionary.name,
                     CdQuestionaryType = questionaryConfig.questionary.cdQuestionaryType,
                     CdArea = questionaryConfig.questionary.cdArea,
-                    IDProcessLeader = questionaryConfig.questionary.iDProcessLeader,
                     CreateDate = DateTime.Now
                 };
                  

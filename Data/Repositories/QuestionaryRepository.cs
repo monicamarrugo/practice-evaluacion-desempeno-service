@@ -28,7 +28,7 @@ namespace EvaluacionDesempenoApi.Data.Repositories
 
         public Questionaries GetByIdIncludes(int id)
         {
-            return _dbContext.Questionaries.Include(p => p.Employees)
+            return _dbContext.Questionaries
                 .Include(d => d.QuestionaryTypes)
                 .Where(q => q.IdQuestionary == id).FirstOrDefault();
         }
