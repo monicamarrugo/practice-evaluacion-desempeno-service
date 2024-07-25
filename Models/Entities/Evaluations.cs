@@ -33,6 +33,9 @@ namespace EvaluacionDesempenoApi.Models.Entities
         [JsonIgnore]
         public ICollection<EvaluationsPositions> EvaluationsPositions { get; set; }
 
-        
+        [JsonIgnore]
+        public ICollection<EvaluationRecord> EvaluationRecords { get; set; }
+
+
     }
 }

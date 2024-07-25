@@ -34,6 +34,13 @@ namespace EvaluacionDesempenoApi.Controllers
             return Ok(types);
         }
 
+        [HttpGet("configQuestionaryToRecord")]
+        public IActionResult GetConfigToRecord(int id)
+        {
+            var types = this._questionaryConfigService.GetQuestionaryToRecord(id);
+            return Ok(types);
+        }
+
         [HttpGet("configCompleteByIdQuestionary")]
         public IActionResult GetConfigCompleteByQuestionary(int id)
         {

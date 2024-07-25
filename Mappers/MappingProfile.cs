@@ -27,17 +27,35 @@ namespace EvaluacionDesempenoApi.Mappers
                  .ForMember(dto => dto.nameArea, opt => opt.MapFrom(ent => ent.Questions.Areas.NameArea));
 
             CreateMap<EvaluationsDto, Evaluations>();
-            CreateMap<Evaluations, EvaluationsDto>();
             CreateMap<EvaluationPositionDto, EvaluationsPositions>();
             CreateMap<EvaluationsPositions, EvaluationPositionDto>();
             CreateMap<Positions, EvaluationPositionDto>();
             CreateMap<Evaluations, EvaluationsDto>()
-           .ForMember(dto => dto.questionaryName, opt => opt.MapFrom(ent => ent.Questionaries.Name));
+           .ForMember(dto => dto.questionaryName, opt => opt.MapFrom(ent => ent.Questionaries.Name))
+           .ForMember(dto => dto.scaleValues, opt => opt.MapFrom(ent => ent.Escales.EscalesValues));
 
             CreateMap<Employees, EmployeeDto>()
            .ForMember(dto => dto.namePosition, opt => opt.MapFrom(ent => ent.Positions.NamePosition))
            .ForMember(dto => dto.nameDivisions, opt => opt.MapFrom(ent => ent.Divisions.Name))
            .ForMember(dto => dto.nameResponsible, opt => opt.MapFrom(ent => ent.Responsible.Names + " " + ent.Responsible.LastNames));
+
+            CreateMap<EvaluationRecordDto, EvaluationRecord>();
+            CreateMap<EvaluationRecord, EvaluationRecordDto>();
+            CreateMap<RecordDetailsDto, RecordDetails>();
+            CreateMap<RecordDetailsDto, RecordDetailsTemp>();
+            CreateMap<RecordDetails, RecordDetailsDto>();
+            CreateMap<RecordDetailsTemp, RecordDetailsDto>();
+            CreateMap<EscalesValues, EscaleValuesDto>();
+
+            CreateMap<QuestionariesConfig, RecordDetailsDto>()
+                 .ForMember(dto => dto.idGroups, opt => opt.MapFrom(ent => ent.Questions.QuestionGroupRelations.Count > 0 ?
+                        ent.Questions.QuestionGroupRelations.FirstOrDefault().Groups.IdGroups : 0))
+                 .ForMember(dto => dto.groupNameES, opt => opt.MapFrom(ent => ent.Questions.QuestionGroupRelations.Count > 0 ?
+                        ent.Questions.QuestionGroupRelations.FirstOrDefault().Groups.NameES : "Ninguno..."))
+                 .ForMember(dto => dto.groupNameEN, opt => opt.MapFrom(ent => ent.Questions.QuestionGroupRelations.Count > 0 ?
+                        ent.Questions.QuestionGroupRelations.FirstOrDefault().Groups.NameEN : "Ninguno..."))
+                 .ForMember(dto => dto.descriptionES, opt => opt.MapFrom(ent => ent.Questions.DescriptionES))
+                 .ForMember(dto => dto.descriptionEN, opt => opt.MapFrom(ent => ent.Questions.DescriptionEN));
         }
     }
 }

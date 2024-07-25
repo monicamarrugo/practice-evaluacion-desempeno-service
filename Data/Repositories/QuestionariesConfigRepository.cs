@@ -61,16 +61,19 @@ namespace EvaluacionDesempenoApi.Data.Repositories
             foreach (var uConfig in UpdatedConfigs)
             {
                 var existingQuestion = currentConfigs.FirstOrDefault(q => q.IdQuestions == uConfig.idQuestions);
-                var config = _mapper.Map<QuestionariesConfig>(uConfig);
+                //var config = _mapper.Map<QuestionariesConfig>(uConfig);
                 if (existingQuestion != null)
                 {
                     // Actualizar la pregunta existente
-                     _dbContext.QuestionariesConfig.Update(config);
+                    // _dbContext.QuestionariesConfig.Update(config);
+                    _mapper.Map(uConfig, existingQuestion);
                 }
                 else
                 {
                     // Agregar la nueva pregunta
-                    _dbContext.QuestionariesConfig.Add(config);
+                    //_dbContext.QuestionariesConfig.Add(config);
+                    var newConfig = _mapper.Map<QuestionariesConfig>(uConfig);
+                    _dbContext.QuestionariesConfig.Add(newConfig);
                 }
             }
 

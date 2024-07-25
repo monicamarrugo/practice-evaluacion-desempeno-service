@@ -54,6 +54,7 @@ public class Program
         builder.Services.AddScoped(typeof(IQuestionariesConfigRepository), typeof(QuestionariesConfigRepository));
         builder.Services.AddScoped(typeof(IQuestionaryRepository), typeof(QuestionaryRepository));
         builder.Services.AddScoped(typeof(IEvaluationRepository), typeof(EvaluationRepository));
+        builder.Services.AddScoped(typeof(IRecordRepository), typeof(RecordRepository));
         builder.Services.AddScoped<IQuestionTypeService, QuestionTypeService>();
         builder.Services.AddScoped<IQuestionService, QuestionService>();
         builder.Services.AddScoped<IGroupService, GroupService>();
@@ -66,6 +67,7 @@ public class Program
         builder.Services.AddScoped<IQuestionaryService, QuestionaryService>();
         builder.Services.AddScoped<IQuestionaryTypeService, QuestionaryTypeService>();
         builder.Services.AddScoped<IEvaluationService, EvaluationService>();
+        builder.Services.AddScoped<IRecordService, RecordService>();
 
         builder.Services.AddDbContext<ApplicationDbContext>();
         builder.Services.AddCors(options => {

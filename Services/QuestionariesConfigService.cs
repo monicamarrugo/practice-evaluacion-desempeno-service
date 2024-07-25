@@ -29,6 +29,15 @@ namespace EvaluacionDesempenoApi.Services
             configs = _mapper.Map<List<QuestionariesConfigDto>>(entities);
             return configs;
         }
+
+        public List<RecordDetailsDto> GetQuestionaryToRecord(int idQuestionary)
+        {
+            List<RecordDetailsDto> configsRecords = new List<RecordDetailsDto>();
+            var entities = _questionariesConfigRepository.GetByQuestionaryIncludes(idQuestionary);
+
+            configsRecords = _mapper.Map<List<RecordDetailsDto>>(entities);
+            return configsRecords;
+        }
         public CreateQuestionaryConfigDto GetCompleteByQuestionary(int idQuestionary)
         {
             CreateQuestionaryConfigDto configCreate = new CreateQuestionaryConfigDto();

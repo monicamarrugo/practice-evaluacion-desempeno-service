@@ -28,10 +28,10 @@ namespace EvaluacionDesempenoApi.Controllers
             return Ok(employees);
         }
 
-        [HttpPost("listEmployeesEvaluations")]
+        [HttpPost("listEmployeesRecord")]
         public IActionResult GetEmployeesEvaluations([FromBody]  SearchEmployeesDto dataSearch)
         {
-            var employees = this._employeeService.GetEmployeesEvaluations(dataSearch);
+            var employees = this._employeeService.GetEmployeesFromRecords(dataSearch);
             return Ok(employees);
         }
 

@@ -20,6 +20,7 @@ namespace EvaluacionDesempenoApi.Data.Repositories
         {
             return _dbContext.Evaluations
                 .Include(e => e.EvaluationsPositions)
+                .Include(s => s.Escales).ThenInclude(v => v.EscalesValues)
                 .Where(e =>
                             (e.IndEnabled == true)
                             &&

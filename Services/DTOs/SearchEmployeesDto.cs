@@ -7,5 +7,7 @@ namespace EvaluacionDesempenoApi.Services.DTOs
         public int idResponsible { get; set; }
         public List<EvaluationPositionDto> idPositions { get; set; } 
         public string cdDivisions { get; set;}
+
+        public int idEvaluation { get; set; }
     }
 }

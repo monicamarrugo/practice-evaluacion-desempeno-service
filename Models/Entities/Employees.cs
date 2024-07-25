@@ -30,5 +30,13 @@ namespace EvaluacionDesempenoApi.Models.Entities
 
         [JsonIgnore]
         public ICollection<Evaluations> Questionaries { get; set; }
+
+        [InverseProperty("Evaluator")]
+        [JsonIgnore]
+        public ICollection<EvaluationRecord> EvaluationsAsEvaluator { get; set; }
+
+        [InverseProperty("Employee")]
+        [JsonIgnore]
+        public ICollection<EvaluationRecord> EvaluationsAsEmployee { get; set; }
     }
 }

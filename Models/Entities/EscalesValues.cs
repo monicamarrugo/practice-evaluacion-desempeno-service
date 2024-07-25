@@ -12,7 +12,7 @@ namespace EvaluacionDesempenoApi.Models.Entities
         public Escales Escales { get; set; }
         public string Value { get; set; }
         public string NameValue { get; set; }
-        public bool IndOrder { get; set; }
+        public int IndOrder { get; set; }
         public bool IndMayor { get; set; }
     }
 }

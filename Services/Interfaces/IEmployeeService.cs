@@ -11,5 +11,7 @@ namespace EvaluacionDesempenoApi.Services.Interfaces
         public ResponseTransaction UpdatelEmployee(EmployeeDto employee);
         public EmployeeDto GetById(int id);
         List<EmployeeDto> GetEmployeesEvaluations(SearchEmployeesDto data);
+
+        List<EmployeeRecordDto> GetEmployeesFromRecords(SearchEmployeesDto data);
     }
 }

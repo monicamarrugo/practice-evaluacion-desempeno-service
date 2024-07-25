@@ -26,5 +26,7 @@ namespace EvaluacionDesempenoApi.Services.DTOs
         public DateTimeOffset? modifiedDate { get; set; }
 
         public List<EvaluationPositionDto> evaluationsPositions { get; set; }
+
+        public List<EscaleValuesDto> scaleValues { get; set; }
     }
 }

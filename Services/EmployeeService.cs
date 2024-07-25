@@ -50,8 +50,13 @@ namespace EvaluacionDesempenoApi.Services
             });
             return employees;
         }
+        public List<EmployeeRecordDto> GetEmployeesFromRecords(SearchEmployeesDto data)
+        {
+            return _employeesRepository.GetEmployeesFromRecords(data);
 
-        public EmployeeDto GetById(int id)
+        }
+
+            public EmployeeDto GetById(int id)
         {
             EmployeeDto employee = new EmployeeDto();
             var entity = _employeesRepository.GetByIdIncludes(id);

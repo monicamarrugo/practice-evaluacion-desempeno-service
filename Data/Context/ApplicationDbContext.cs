@@ -20,6 +20,11 @@ namespace EvaluacionDesempenoApi.Data.Context
         public DbSet<Frequencies> Frequencies { get; set; }
         public DbSet<Evaluations> Evaluations { get; set; }
         public DbSet<EvaluationsPositions> EvaluationsPositions { get; set; }
+        public DbSet<EvaluationRecord> EvaluationRecord { get; set; }
+        public DbSet<EvaluationStates> EvaluationStates { get; set; }
+        public DbSet<RecordDetails> RecordDetails { get; set; }
+        public DbSet<RecordDetailsTemp> RecordDetailsTemp { get; set; }
+        public DbSet<KpiRecordDetails> KpiRecordDetails { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
        : base(options)
@@ -44,6 +49,41 @@ namespace EvaluacionDesempenoApi.Data.Context
             try
             {
                 base.OnModelCreating(modelBuilder);
+
+                modelBuilder.Entity<KpiRecordDetails>()
+                 .HasOne(m => m.EvaluationRecord)
+                 .WithMany(e => e.KpiRecordDetails)
+                 .HasForeignKey(m => m.IdEvaluationRecord);
+
+                modelBuilder.Entity<RecordDetails>()
+                 .HasOne(m => m.EvaluationRecord)
+                 .WithMany(e => e.RecordDetails)
+                 .HasForeignKey(m => m.IdEvaluationRecord);
+
+                modelBuilder.Entity<RecordDetailsTemp>()
+                 .HasOne(m => m.EvaluationRecord)
+                 .WithMany(e => e.RecordDetailsTemp)
+                 .HasForeignKey(m => m.IdEvaluationRecord);
+
+                modelBuilder.Entity<EvaluationRecord>()
+                 .HasOne(m => m.EvaluationStates)
+                 .WithMany(e => e.EvaluationRecords)
+                 .HasForeignKey(m => m.CdEvaluationStates);
+
+                modelBuilder.Entity<EvaluationRecord>()
+                 .HasOne(m => m.Evaluation)
+                 .WithMany(e => e.EvaluationRecords)
+                 .HasForeignKey(m => m.IdEvaluations);
+
+                modelBuilder.Entity<EvaluationRecord>()
+             .HasOne(er => er.Evaluator)
+             .WithMany(e => e.EvaluationsAsEvaluator)
+             .HasForeignKey(er => er.IdEvaluator); // O la opción que prefieras
+
+                modelBuilder.Entity<EvaluationRecord>()
+                    .HasOne(er => er.Employee)
+                    .WithMany(e => e.EvaluationsAsEmployee)
+                    .HasForeignKey(er => er.IdEmployee);
 
                 modelBuilder.Entity<EvaluationsPositions>()
                    .HasOne(m => m.Evaluations)
@@ -96,10 +136,10 @@ namespace EvaluacionDesempenoApi.Data.Context
                     .WithMany(c => c.QuestionariesConfig)
                     .HasForeignKey(m => m.IdQuestionary);
 
-               modelBuilder.Entity<Questionaries>()
-                  .HasOne(m => m.Area)
-                  .WithMany(e => e.Questionaries)
-                  .HasForeignKey(m => m.CdArea);
+                modelBuilder.Entity<Questionaries>()
+                   .HasOne(m => m.Area)
+                   .WithMany(e => e.Questionaries)
+                   .HasForeignKey(m => m.CdArea);
 
 
                 modelBuilder.Entity<Questionaries>()
@@ -107,7 +147,7 @@ namespace EvaluacionDesempenoApi.Data.Context
                     .WithMany(e => e.Questionaries)
                     .HasForeignKey(e => e.CdQuestionaryType);
 
-                
+
                 modelBuilder.Entity<Employees>()
                     .HasOne(e => e.Responsible)
                     .WithMany(e => e.Subordinates)
@@ -138,10 +178,10 @@ namespace EvaluacionDesempenoApi.Data.Context
                   .WithOne(ic => ic.Questions)
                   .HasForeignKey<Formats>(i => i.IdFormats);
 
-               modelBuilder.Entity<QuestionGroupRelation>()
-                    .HasOne(m => m.Questions)
-                    .WithMany(e => e.QuestionGroupRelations)
-                    .HasForeignKey(m => m.IdQuestions);
+                modelBuilder.Entity<QuestionGroupRelation>()
+                     .HasOne(m => m.Questions)
+                     .WithMany(e => e.QuestionGroupRelations)
+                     .HasForeignKey(m => m.IdQuestions);
 
                 modelBuilder.Entity<QuestionGroupRelation>()
                     .HasOne(m => m.Groups)
