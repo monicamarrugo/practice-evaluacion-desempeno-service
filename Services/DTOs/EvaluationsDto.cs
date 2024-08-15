@@ -24,6 +24,7 @@ namespace EvaluacionDesempenoApi.Services.DTOs
         public DateTimeOffset? createDate { get; set; }
         public string? modifiedUser { get; set; }
         public DateTimeOffset? modifiedDate { get; set; }
+        public int? idFlag { get; set; }
 
         public List<EvaluationPositionDto> evaluationsPositions { get; set; }
 

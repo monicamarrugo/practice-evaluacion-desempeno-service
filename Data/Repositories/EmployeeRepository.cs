@@ -26,17 +26,18 @@ namespace EvaluacionDesempenoApi.Data.Repositories
                 .ToList();
         }
 
-        public List<EmployeeRecordDto> GetEmployeesFromRecords(SearchEmployeesDto data)
+        public Task<List<EmployeeRecordDto>> GetEmployeesFromRecordsAsync(SearchEmployeesDto data)
         {
+            var idPositionsList = data.idPositions.Select(p => p.idPosition).ToList();
             var queryEmployees = from employee in _dbContext.Employees
                         .Include(e => e.Divisions)
                         .Include(e => e.Positions)
                         where employee.IDResponsible == data.idResponsible && employee.Enabled
                         join evaluationRecord in _dbContext.EvaluationRecord
                             .Include(er => er.EvaluationStates)
+                            .Where(er => er.IdEvaluations == data.idEvaluation)
                         on employee.IdEmployees equals evaluationRecord.IdEmployee into evaluationGroup
                         from evaluationRecord in evaluationGroup.DefaultIfEmpty()
-                        where evaluationRecord == null || evaluationRecord.IdEvaluations == data.idEvaluation
                         select new EmployeeRecordDto
                         {
                             idEmployee = employee.IdEmployees,
@@ -52,9 +53,9 @@ namespace EvaluacionDesempenoApi.Data.Repositories
                             recordStateES = evaluationRecord == null ? null : evaluationRecord.EvaluationStates.NameEvaluationStatesES,
                             recordStateEN = evaluationRecord == null ? null : evaluationRecord.EvaluationStates.NameEvaluationStatesEN,
                             applyEvaluations = ((data.cdDivisions == null || employee.Divisions.CdDivisions == data.cdDivisions)
-                             && (data.idPositions.Count == 0 || data.idPositions.Any(p => p.idPosition == employee.Positions.IdPosition)))? true : false,
+                             && (data.idPositions.Count == 0 || idPositionsList.Any(p => p == employee.IdPosition)))? true : false,
                         };
-            return queryEmployees.ToList();
+            return queryEmployees.ToListAsync();
         }
 
         public Employees GetByIdIncludes(int id)

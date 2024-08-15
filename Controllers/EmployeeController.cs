@@ -29,9 +29,9 @@ namespace EvaluacionDesempenoApi.Controllers
         }
 
         [HttpPost("listEmployeesRecord")]
-        public IActionResult GetEmployeesEvaluations([FromBody]  SearchEmployeesDto dataSearch)
+        public async Task<IActionResult> GetEmployeesEvaluations([FromBody]  SearchEmployeesDto dataSearch)
         {
-            var employees = this._employeeService.GetEmployeesFromRecords(dataSearch);
+            var employees = await  this._employeeService.GetEmployeesFromRecordsAsync(dataSearch);
             return Ok(employees);
         }
 

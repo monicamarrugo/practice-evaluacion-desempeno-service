@@ -16,9 +16,46 @@ namespace EvaluacionDesempenoApi.Data.Repositories
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public ResponseTransaction UpdateRecordEvaluation(CreateEvaluationRecordDto recordData)
+        public EvaluationRecord GetRecordsTemp(CreateEvaluationRecordDto recordData)
         {
-            throw new NotImplementedException();
+            var existsRecord = _dbContext.EvaluationRecord
+                .Include(e => e.RecordDetailsTemp)
+                .Where(r => ((r.IdEvaluator == recordData.evaluationRecord.idEvaluator) &&
+                              (r.IdEmployee == recordData.evaluationRecord.idEmployee) &&
+                              (r.IdEvaluations == recordData.evaluationRecord.idEvaluations))).FirstOrDefault();
+            return existsRecord;
+        }
+        public void UpdateRecordEvaluation(CreateEvaluationRecordDto recordData)
+        {
+            var existsRecord = _dbContext.EvaluationRecord
+                .Where(r => ((r.IdEvaluator == recordData.evaluationRecord.idEvaluator) && 
+                              (r.IdEmployee == recordData.evaluationRecord.idEmployee) &&
+                              (r.IdEvaluations == recordData.evaluationRecord.idEvaluations))).FirstOrDefault();
+
+           
+            if (existsRecord == null)
+            {
+              
+                var record = _mapper.Map<EvaluationRecord>(recordData.evaluationRecord);
+                if (recordData.recordDetails != null && recordData.recordDetails.Count > 0)
+                {
+                    var details = _mapper.Map<List<RecordDetailsTemp>>(recordData.recordDetails);
+                    record.RecordDetailsTemp = details;
+                }
+                
+                _dbContext.Add(record);
+            }
+            else
+            {
+                _mapper.Map(recordData.evaluationRecord, existsRecord);
+                if (recordData.recordDetails != null && recordData.recordDetails.Count > 0)
+                {
+                    var details = _mapper.Map<List<RecordDetailsTemp>>(recordData.recordDetails);
+                    existsRecord.RecordDetailsTemp = details;
+                }
+            }
+
+            _dbContext.SaveChanges();
         }
 
         public EvaluationRecord GetRecordsTemp(int idEvaluationsRecord)
@@ -45,8 +82,29 @@ namespace EvaluacionDesempenoApi.Data.Repositories
 
         public void FinishRecords(CreateEvaluationRecordDto recordData)
         {
-            var record = recordData.evaluationRecord;
-            if (recordData.evaluationRecord.idEvaluationRecord != null &&)
+           var record = _mapper.Map<EvaluationRecord>(recordData.evaluationRecord);
+            var details = _mapper.Map<List<RecordDetails>>(recordData.recordDetails);
+            if (record.IdEvaluationRecord == null || record.IdEvaluationRecord == 0)
+            {
+                record.CreateDate = DateTime.Now.ToUniversalTime();
+                record.RecordDetails = details;
+
+                _dbContext.EvaluationRecord.Add(record);
+               
+            }
+            else
+            {
+                record.ModifiedDate = DateTime.Now.ToUniversalTime();
+                _dbContext.EvaluationRecord.Update(record);
+
+                details.ForEach(e => {
+                    e.IdRecordDetails = 0;
+                }
+                );
+
+                _dbContext.RecordDetails.AddRange(details);
+            }
+            _dbContext.SaveChanges();
         }
     }
 }

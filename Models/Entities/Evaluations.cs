@@ -24,17 +24,22 @@ namespace EvaluacionDesempenoApi.Models.Entities
         public DateTimeOffset? CreateDate { get; set;}
         public string? ModifiedUser { get; set;}
         public DateTimeOffset? ModifiedDate { get; set; }
+        public int? IdFlag { get; set; }
 
         public Escales Escales { get; set; }
         public Divisions Divisions { get; set; }
         public Questionaries Questionaries { get; set; }
         public Employees Employees { get; set; }
 
+        public Flags Flags { get; set; }
+
         [JsonIgnore]
         public ICollection<EvaluationsPositions> EvaluationsPositions { get; set; }
 
         [JsonIgnore]
         public ICollection<EvaluationRecord> EvaluationRecords { get; set; }
+
+
 
 
     }

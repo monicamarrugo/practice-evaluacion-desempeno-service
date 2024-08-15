@@ -24,6 +24,12 @@ namespace EvaluacionDesempenoApi.Models.Entities
         public DateTimeOffset? CreateDate { get; set;}
         public string? ModifiedUser { get; set;}
         public DateTimeOffset? ModifiedDate { get; set; }
+
+        public int? IdFlag { get; set;}
+
+        public string? DescriptionFlag { get; set;}
+
+        public string? ColorFlag { get; set;}
         public Employees Evaluator { get; set; }
         public Employees Employee { get; set; }
         public Evaluations Evaluation { get; set; }

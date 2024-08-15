@@ -1,4 +1,5 @@
 using AutoMapper;
+using Azure.Storage.Blobs;
 using EvaluacionDesempenoApi.Data.Context;
 using EvaluacionDesempenoApi.Data.Repositories;
 using EvaluacionDesempenoApi.Mappers;
@@ -47,6 +48,9 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         // Add services to the container.
         builder.Services.AddControllers();
+        // Configurar el BlobServiceClient con la cadena de conexión de Azure Blob Storage
+        builder.Services.AddSingleton(x => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorage")));
+
         builder.Services.AddSingleton(mapper);
         builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         builder.Services.AddScoped(typeof(IQuestionRepository), typeof(QuestionRepository));
@@ -55,6 +59,8 @@ public class Program
         builder.Services.AddScoped(typeof(IQuestionaryRepository), typeof(QuestionaryRepository));
         builder.Services.AddScoped(typeof(IEvaluationRepository), typeof(EvaluationRepository));
         builder.Services.AddScoped(typeof(IRecordRepository), typeof(RecordRepository));
+        builder.Services.AddScoped(typeof(IFileRepository), typeof(FileRepository));
+        builder.Services.AddScoped(typeof(IFlagRepository), typeof(FlagRepository));
         builder.Services.AddScoped<IQuestionTypeService, QuestionTypeService>();
         builder.Services.AddScoped<IQuestionService, QuestionService>();
         builder.Services.AddScoped<IGroupService, GroupService>();
@@ -68,6 +74,12 @@ public class Program
         builder.Services.AddScoped<IQuestionaryTypeService, QuestionaryTypeService>();
         builder.Services.AddScoped<IEvaluationService, EvaluationService>();
         builder.Services.AddScoped<IRecordService, RecordService>();
+        builder.Services.AddScoped<IDynamicBlobService, DynamicBlobService>();
+        builder.Services.AddScoped<IFileService, FileService>();
+        builder.Services.AddScoped<IFlagService, FlagService>();
+        builder.Services.AddScoped<IColorService, ColorService>();
+        builder.Services.AddScoped<IFlagTypeService, FlagTypeService>();
+
 
         builder.Services.AddDbContext<ApplicationDbContext>();
         builder.Services.AddCors(options => {

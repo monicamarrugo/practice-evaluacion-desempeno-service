@@ -4,7 +4,7 @@ namespace EvaluacionDesempenoApi.Services.Interfaces
 {
     public interface IRecordService
     {
-        ResponseTransaction SaveRecordEvaluation(CreateEvaluationRecordDto recordData);
+        CreateEvaluationRecordDto SaveRecordEvaluation(CreateEvaluationRecordDto recordData);
         ResponseTransaction UpdateRecordEvaluation(CreateEvaluationRecordDto recordData);
         ResponseTransaction SaveRecordKpi(CreateEvaluationKpiRecordDto recordData);
 

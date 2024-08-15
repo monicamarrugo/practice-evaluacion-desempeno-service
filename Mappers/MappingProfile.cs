@@ -46,6 +46,16 @@ namespace EvaluacionDesempenoApi.Mappers
             CreateMap<RecordDetails, RecordDetailsDto>();
             CreateMap<RecordDetailsTemp, RecordDetailsDto>();
             CreateMap<EscalesValues, EscaleValuesDto>();
+            CreateMap<FileDto, Files>();
+            CreateMap<Files, FileDto>();
+            CreateMap<Flags, FlagsDto>();
+            CreateMap<FlagsDto,Flags>();
+            CreateMap<FlagRulesDto,FlagRules>();
+            CreateMap<FlagRules,FlagRulesDto>();
+            CreateMap<Colors, ColorDto>();
+            CreateMap<ColorDto, Colors>();
+            CreateMap<FlagTypeDto, FlagTypes>();
+            CreateMap<FlagTypes, FlagTypeDto>();
 
             CreateMap<QuestionariesConfig, RecordDetailsDto>()
                  .ForMember(dto => dto.idGroups, opt => opt.MapFrom(ent => ent.Questions.QuestionGroupRelations.Count > 0 ?

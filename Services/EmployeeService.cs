@@ -2,6 +2,7 @@
 using EvaluacionDesempenoApi.Data.Repositories;
 using EvaluacionDesempenoApi.Models.Entities;
 using EvaluacionDesempenoApi.Services.DTOs;
+using EvaluacionDesempenoApi.Services.Enums;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using static Azure.Core.HttpHeader;
 
@@ -50,9 +51,19 @@ namespace EvaluacionDesempenoApi.Services
             });
             return employees;
         }
-        public List<EmployeeRecordDto> GetEmployeesFromRecords(SearchEmployeesDto data)
+        public async Task<DashboardEvaluationOneDto> GetEmployeesFromRecordsAsync(SearchEmployeesDto data)
         {
-            return _employeesRepository.GetEmployeesFromRecords(data);
+            DashboardEvaluationOneDto dashboardEvaluationOneDto = new DashboardEvaluationOneDto();
+            var employees= await _employeesRepository.GetEmployeesFromRecordsAsync(data);
+            var totalEmployees =  employees.Count;
+            var totalApplies = employees.Count(e => e.applyEvaluations == true);
+            var totalDone = employees.Count(e => e.existsRecord == true && e.cdRecordState == RecordStateEnum.Finished.GetStringValue());
+
+            dashboardEvaluationOneDto.totalEmployees = totalEmployees;
+            dashboardEvaluationOneDto.totalEnabled = totalApplies;
+            dashboardEvaluationOneDto.totalDone = totalDone;
+            dashboardEvaluationOneDto.employees = employees;
+            return dashboardEvaluationOneDto;
 
         }
 

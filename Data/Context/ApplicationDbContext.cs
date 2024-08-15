@@ -25,6 +25,12 @@ namespace EvaluacionDesempenoApi.Data.Context
         public DbSet<RecordDetails> RecordDetails { get; set; }
         public DbSet<RecordDetailsTemp> RecordDetailsTemp { get; set; }
         public DbSet<KpiRecordDetails> KpiRecordDetails { get; set; }
+        public DbSet<FileTypes> FileTypes { get; set; }
+        public DbSet<Files> Files { get; set; }
+        public DbSet<Flags> Flags { get; set; }
+        public DbSet<FlagRules> FlagRules { get; set; }
+        public DbSet<Colors> Colors { get; set; }
+        public DbSet<FlagTypes> FlagTypes { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
        : base(options)
@@ -49,6 +55,31 @@ namespace EvaluacionDesempenoApi.Data.Context
             try
             {
                 base.OnModelCreating(modelBuilder);
+
+                modelBuilder.Entity<Evaluations>()
+                  .HasOne(m => m.Flags)
+                  .WithMany(e => e.Evaluations)
+                  .HasForeignKey(m => m.IdFlag);
+
+                modelBuilder.Entity<FlagRules>()
+                  .HasOne(e => e.Colors)
+                  .WithMany(e => e.FlagRules)
+                  .HasForeignKey(e => e.IdColor);
+
+                modelBuilder.Entity<FlagRules>()
+                   .HasOne(e => e.FlagTypes)
+                   .WithMany(e => e.FlagRules)
+                   .HasForeignKey(e => e.CdFlagType);
+
+                modelBuilder.Entity<FlagRules>()
+                .HasOne(m => m.Flags)
+                .WithMany(e => e.FlagRules)
+                .HasForeignKey(m => m.IdFlag);
+
+                modelBuilder.Entity<Files>()
+                   .HasOne(e => e.FileType)
+                   .WithMany(e => e.Files)
+                   .HasForeignKey(e => e.CdFileType);
 
                 modelBuilder.Entity<KpiRecordDetails>()
                  .HasOne(m => m.EvaluationRecord)

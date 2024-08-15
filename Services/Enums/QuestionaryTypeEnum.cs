@@ -9,6 +9,28 @@
         [StringValue("KPI")]
         Indicators
     }
+
+    public enum RecordStateEnum
+    {
+        [StringValue("STARTED")]
+        Started,
+        [StringValue("PROGRESS")]
+        Progress,
+        [StringValue("FINISHED")]
+        Finished,
+        [StringValue("TOAPPROVED")]
+        ToApproved,
+        [StringValue("APPROVED")]
+        Approved,
+    }
+
+    public enum FileTypeEnum
+    {
+        [StringValue("KPIFILE")]
+        KpiFile,
+        [StringValue("EVALFILE")]
+        EvaluationFile,
+    }
     public class StringValueAttribute : Attribute
     {
         public string Value { get; }

@@ -5,10 +5,13 @@ namespace EvaluacionDesempenoApi.Data.Repositories
 {
     public interface IRecordRepository
     {
-        ResponseTransaction UpdateRecordEvaluation(CreateEvaluationRecordDto recordData);
+        void UpdateRecordEvaluation(CreateEvaluationRecordDto recordData);
 
         EvaluationRecord GetRecordsTemp(int idEvaluationsRecord);
         EvaluationRecord GetRecords(int idEvaluationsRecord);
+        EvaluationRecord GetRecordsTemp(CreateEvaluationRecordDto recordData);
         void RemoveTemp(List<RecordDetailsTemp> records);
+
+        void FinishRecords(CreateEvaluationRecordDto recordData);
     }
 }

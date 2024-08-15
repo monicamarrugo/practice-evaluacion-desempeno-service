@@ -18,6 +18,12 @@ namespace EvaluacionDesempenoApi.Services.DTOs
         public string language { get; set; }
         public string? evaluationFile { get; set; }
         public string? fileType { get; set; }
+
+        public int? idFlag { get; set; }
+
+        public string? descriptionFlag { get; set; }
+
+        public string? colorFlag { get; set; }
         public string? createUser { get; set; }
         public DateTimeOffset? createDate { get; set; }
         public string? modifiedUser { get; set; }
