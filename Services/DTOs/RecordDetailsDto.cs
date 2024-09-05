@@ -16,5 +16,9 @@
         public int? calification { get; set; }
         public decimal? totalCalification { get; set; }
         public bool noApplyScale { get; set; }
+        public decimal? average { get; set; }
+        public int idFlag { get; set; }
+        public string flagColor { get; set; }
+        public string flagDescription { get; set; }
     }
 }

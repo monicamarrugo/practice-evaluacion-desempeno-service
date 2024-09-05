@@ -9,7 +9,8 @@ namespace EvaluacionDesempenoApi.Models.Entities
     {
         [Key]
         public int IdFlag { get; set;}
-        public string NameFlag { get; set;}
+        public string NameFlagES { get; set;}
+        public string NameFlagEN { get; set; }
         public string? CreateUser { get; set;}
         public DateTimeOffset? CreateDate { get; set;}
         public string? ModifiedUser { get; set;}

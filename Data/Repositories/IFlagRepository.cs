@@ -5,7 +5,7 @@ namespace EvaluacionDesempenoApi.Data.Repositories
 {
     public interface IFlagRepository
     {
-        void UpdateFlag(CreateFlagDto flagData);
+        void UpdateFlagRules(FlagsDto flagData);
         Flags GetFlag(int idFlag);
     }
 }

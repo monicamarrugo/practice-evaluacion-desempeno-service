@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace EvaluacionDesempenoApi.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class FlagController : ControllerBase
     {
 
@@ -25,6 +24,13 @@ namespace EvaluacionDesempenoApi.Controllers
         public IActionResult SaveFlag([FromBody] FlagsDto flagData)
         {
             var responseCreate = this._flagService.SaveFlag(flagData);
+            return Ok(responseCreate);
+        }
+
+        [HttpPost("updateFlag")]
+        public IActionResult UpdateFlag([FromBody] FlagsDto flagData)
+        {
+            var responseCreate = this._flagService.UpdateFlag(flagData);
             return Ok(responseCreate);
         }
 

@@ -61,18 +61,13 @@ namespace EvaluacionDesempenoApi.Services
             if (flagData == null || flagData.flagRules == null)
             {
                 response.error = "SI";
-                response.errorDetail = "Faltan datos de la evaluación";
+                response.errorDetail = "Faltan datos de la bandera";
                 return response;
             }
             try
             {
                 var flag = _mapper.Map<Flags>(flagData);
                 flag.CreateDate = DateTime.Now.ToUniversalTime();
-               /* if (flagData.flagRules != null && flagData.flagRules.Count > 0)
-                {
-                    var rules = _mapper.Map<List<FlagRules>>(flagData.flagRules);
-                    flag.RecordDetailsTemp = details;
-                }*/
 
                 _flagsGenericRepository.Add(flag);
 
@@ -92,7 +87,29 @@ namespace EvaluacionDesempenoApi.Services
 
         public ResponseTransaction UpdateFlag(FlagsDto flagData)
         {
-            throw new NotImplementedException();
+            ResponseTransaction response = new ResponseTransaction();
+            if (flagData == null || flagData.flagRules == null)
+            {
+                response.error = "SI";
+                response.errorDetail = "Faltan datos de la bandera";
+                return response;
+            }
+            try
+            {
+                _flagRepository.UpdateFlagRules(flagData);
+
+                response.error = "NO";
+                response.message = "El flag fue actualizado exitosamente!";
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+
+                response.error = "SI";
+                response.errorDetail = ex.Message;
+                return response;
+            }
         }
     }
 }

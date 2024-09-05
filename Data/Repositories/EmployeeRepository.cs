@@ -54,6 +54,10 @@ namespace EvaluacionDesempenoApi.Data.Repositories
                             recordStateEN = evaluationRecord == null ? null : evaluationRecord.EvaluationStates.NameEvaluationStatesEN,
                             applyEvaluations = ((data.cdDivisions == null || employee.Divisions.CdDivisions == data.cdDivisions)
                              && (data.idPositions.Count == 0 || idPositionsList.Any(p => p == employee.IdPosition)))? true : false,
+                            idFlag = evaluationRecord == null ? null : evaluationRecord.IdFlag,
+                            descriptionFlag = evaluationRecord == null ? null : evaluationRecord.DescriptionFlag,
+                            colorFlag = evaluationRecord == null ? null : evaluationRecord.ColorFlag,
+                            finalCalification = evaluationRecord == null ? null :evaluationRecord.FinalCalification,
                         };
             return queryEmployees.ToListAsync();
         }

@@ -10,7 +10,8 @@ namespace EvaluacionDesempenoApi.Models.Entities
         public int IdFlagRules { get; set;}
         public int IdFlag { get; set;}
         public string CdFlagType { get; set;}
-        public string Description { get; set;}
+        public string DescriptionES { get; set;}
+        public string DescriptionEN { get; set; }
         public decimal? MinValue { get; set;}
         public decimal? MaxValue { get; set;}
         public decimal? Value { get; set;}

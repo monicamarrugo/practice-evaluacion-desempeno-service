@@ -5,7 +5,8 @@
         public int idFlagRules { get; set; }
         public int idFlag { get; set; }
         public string cdFlagType { get; set; }
-        public string description { get; set; }
+        public string descriptionES { get; set; }
+        public string descriptionEN { get; set; }
         public decimal? minValue { get; set; }
         public decimal? maxValue { get; set; }
         public decimal? value { get; set; }

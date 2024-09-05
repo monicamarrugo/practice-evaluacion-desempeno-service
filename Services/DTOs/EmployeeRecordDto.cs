@@ -16,6 +16,13 @@
         public string cdRecordState { get; set; }
         public string? recordStateES { get; set; }
         public string? recordStateEN { get; set; }
+        public int? idFlag { get; set; }
+
+        public string? descriptionFlag { get; set; }
+
+        public string? colorFlag { get; set; }
+
+        public decimal? finalCalification { get; set; }
         public bool applyEvaluations { get; set; }
     }
 }

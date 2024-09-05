@@ -5,7 +5,8 @@ namespace EvaluacionDesempenoApi.Services.DTOs
     public class FlagsDto
     {
         public int idFlag { get; set; }
-        public string nameFlag { get; set; }
+        public string nameFlagES { get; set; }
+        public string nameFlagEN { get; set; }
         public string? createUser { get; set; }
         public DateTimeOffset? createDate { get; set; }
         public string? modifiedUser { get; set; }

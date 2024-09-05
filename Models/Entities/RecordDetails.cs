@@ -20,9 +20,11 @@ namespace EvaluacionDesempenoApi.Models.Entities
         public string? ResponseDescription { get; set;}
         public int? Calification { get; set;}
         public decimal? TotalCalification { get; set; }
-
         public bool NoApplyScale { get; set;}
-
+        public decimal? Average { get; set;}
+        public int IdFlag { get; set;}
+        public string FlagColor { get; set;}
+        public string FlagDescription { get; set;}
         public EvaluationRecord EvaluationRecord { get; set;}
     }
 }
