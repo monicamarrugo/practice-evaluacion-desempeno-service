@@ -1,4 +1,6 @@
-﻿namespace EvaluacionDesempenoApi.Services.DTOs
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace EvaluacionDesempenoApi.Services.DTOs
 {
     public class ResponseTransaction
     {
@@ -8,5 +10,8 @@
         public string message { get; set; }
 
         public string response { get; set; }
+        public bool IsIdentityError { get; set; }
+
+        public IEnumerable<IdentityError> errorsIdentity { get; set; }
     }
 }

@@ -14,11 +14,12 @@ namespace EvaluacionDesempenoApi.Services.DTOs
         public string email { get; set; }
         public int? iDResponsible { get; set; }
         public string? nameResponsible { get; set; }
-        public string cdDivisions { get; set; }
+        public string cdDivisions { get; set; } 
         public string? nameDivisions { get; set; }
         public string identification { get; set; }
         public bool enabled { get; set; }
 
         public bool applyEvaluations { get; set; }
+        public int? userId { get; set; }
     }
 }

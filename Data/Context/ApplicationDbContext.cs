@@ -1,10 +1,12 @@
 ﻿using EvaluacionDesempenoApi.Models.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
 
 namespace EvaluacionDesempenoApi.Data.Context
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<ApplicationDbContext> _logger;
@@ -31,30 +33,62 @@ namespace EvaluacionDesempenoApi.Data.Context
         public DbSet<FlagRules> FlagRules { get; set; }
         public DbSet<Colors> Colors { get; set; }
         public DbSet<FlagTypes> FlagTypes { get; set; }
+        public DbSet<Users> Users { get; set; }
+        public DbSet<Profiles> Profiles { get; set; }
+        public DbSet<UsersProfiles> UsersProfiles { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
-       : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
         {
-            _configuration = configuration;
-            ChangeTracker.LazyLoadingEnabled = true;
+        }
+
+        public ApplicationDbContext() : base(new DbContextOptions<ApplicationDbContext>())
+        {
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            try
+            if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("OnConfiguring" + e.Message);
+                optionsBuilder.UseSqlServer("DefaultConnection");
             }
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             try
             {
                 base.OnModelCreating(modelBuilder);
+
+
+
+                modelBuilder.Entity<UsersProfiles>()
+                  .HasOne(m => m.Profiles)
+                  .WithMany(e => e.UsersProfiles)
+                  .HasForeignKey(m => m.CdProfile);
+
+                modelBuilder.Entity<UsersProfiles>()
+                    .HasOne(m => m.User)
+                    .WithMany(c => c.UsersProfiles)
+                    .HasForeignKey(m => m.IdUser);
+
+
+                /* modelBuilder.Entity<ApplicationUser>()
+                    .HasOne(m => m.Employees)
+                    .WithOne(e => e.ApplicationUser)
+                     .HasForeignKey<Employees>(i => i.IdEmployees);*/
+
+                modelBuilder.Entity<ApplicationUser>()
+                    .HasOne(u => u.Employees)
+                    .WithOne()
+                    .HasForeignKey<ApplicationUser>(u => u.IdEmployee)  // La clave foránea en ApplicationUser
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                modelBuilder.Entity<ApplicationUser>()
+                  .HasOne<Languages>()
+                  .WithMany()
+                  .HasForeignKey(u => u.CdLanguage);
+
 
                 modelBuilder.Entity<Evaluations>()
                   .HasOne(m => m.Flags)

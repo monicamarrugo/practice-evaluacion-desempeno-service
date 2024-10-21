@@ -3,13 +3,19 @@ using Azure.Storage.Blobs;
 using EvaluacionDesempenoApi.Data.Context;
 using EvaluacionDesempenoApi.Data.Repositories;
 using EvaluacionDesempenoApi.Mappers;
+using EvaluacionDesempenoApi.Models.Entities;
 using EvaluacionDesempenoApi.Services;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 public class Program
 {
@@ -46,6 +52,37 @@ public class Program
         }
 
         var builder = WebApplication.CreateBuilder(args);
+
+        var configuration = builder.Configuration;
+
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
+        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddDefaultTokenProviders();
+
+        var jwtSettings = configuration.GetSection("Jwt");
+
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings["Issuer"],
+                ValidAudience = jwtSettings["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+            };
+        });
+
         // Add services to the container.
         builder.Services.AddControllers();
         // Configurar el BlobServiceClient con la cadena de conexión de Azure Blob Storage
@@ -61,6 +98,7 @@ public class Program
         builder.Services.AddScoped(typeof(IRecordRepository), typeof(RecordRepository));
         builder.Services.AddScoped(typeof(IFileRepository), typeof(FileRepository));
         builder.Services.AddScoped(typeof(IFlagRepository), typeof(FlagRepository));
+        builder.Services.AddScoped(typeof(IUsersProfilesRepository), typeof(UsersProfilesRepository));
         builder.Services.AddScoped<IQuestionTypeService, QuestionTypeService>();
         builder.Services.AddScoped<IQuestionService, QuestionService>();
         builder.Services.AddScoped<IGroupService, GroupService>();
@@ -79,9 +117,12 @@ public class Program
         builder.Services.AddScoped<IFlagService, FlagService>();
         builder.Services.AddScoped<IColorService, ColorService>();
         builder.Services.AddScoped<IFlagTypeService, FlagTypeService>();
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IProfileService, ProfileService>();
 
 
-        builder.Services.AddDbContext<ApplicationDbContext>();
+
+
         builder.Services.AddCors(options => {
             options.AddPolicy(MyAllowSpecificOrigins,
             builder => builder.WithOrigins("*")
@@ -111,7 +152,7 @@ public class Program
 
 
         app.UseHttpsRedirection();
-
+        app.UseAuthentication();    
         app.UseAuthorization();
         app.UseCors(MyAllowSpecificOrigins);
 

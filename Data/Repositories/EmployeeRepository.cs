@@ -16,7 +16,8 @@ namespace EvaluacionDesempenoApi.Data.Repositories
         public List<Employees> GetAllIncludes()
         {
             return _dbContext.Employees.Include(p => p.Positions)
-                .Include(d => d.Divisions).Include(s => s.Responsible).ToList();
+                .Include(d => d.Divisions).Include(s => s.Responsible)
+                .Include(e => e.ApplicationUser).ToList();
         }
         public List<Employees> GetAllIncludesByResponsible(int idResponsible)
         {
