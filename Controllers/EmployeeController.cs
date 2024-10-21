@@ -21,6 +21,13 @@ namespace EvaluacionDesempenoApi.Controllers
             return Ok(employees);
         }
 
+        [HttpGet("listEmployeesWithUsers")]
+        public IActionResult GetAllEmployeesWithUsers()
+        {
+            var employees = this._employeeService.GetAllEmployeesWithUsers();
+            return Ok(employees);
+        }
+
         [HttpGet("listEmployeesByResponsible")]
         public IActionResult GetListEmployeesByResponsible(int idResponsible)
         {

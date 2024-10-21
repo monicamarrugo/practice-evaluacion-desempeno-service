@@ -14,10 +14,12 @@ namespace EvaluacionDesempenoApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly ILanguageService _languageService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, ILanguageService languageService)
         {
-            _userService = userService;  
+            _userService = userService; 
+            _languageService = languageService;
         }
         
         [HttpPost("register")]
@@ -57,6 +59,13 @@ namespace EvaluacionDesempenoApi.Controllers
         {
             var responseLogin = _userService.Login(loginDto);
             return Ok(responseLogin);
+        }
+
+        [HttpGet("listLanguages")]
+        public IActionResult GetListLanguages()
+        {
+            var languages = this._languageService.GetAllLanguages();
+            return Ok(languages);
         }
     }
 }

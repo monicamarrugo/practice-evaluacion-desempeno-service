@@ -28,6 +28,12 @@ namespace EvaluacionDesempenoApi.Services
             employees = _mapper.Map<List<EmployeeDto>>(entities);
             return employees;
         }
+        public async Task<List<EmployeeDto>> GetAllEmployeesWithUsers()
+        {
+            List<EmployeeDto> employees = new List<EmployeeDto>();
+            employees = await _employeesRepository.GetAllWithUser();
+            return employees;
+        }
 
         public List<EmployeeDto> GetAllEmployeesByResponsible(int idResponsible)
         {

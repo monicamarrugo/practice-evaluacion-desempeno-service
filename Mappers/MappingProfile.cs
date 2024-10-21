@@ -56,6 +56,7 @@ namespace EvaluacionDesempenoApi.Mappers
             CreateMap<ColorDto, Colors>();
             CreateMap<FlagTypeDto, FlagTypes>();
             CreateMap<FlagTypes, FlagTypeDto>();
+            CreateMap<Languages, LanguageDto>();
 
             CreateMap<QuestionariesConfig, RecordDetailsDto>()
                  .ForMember(dto => dto.idGroups, opt => opt.MapFrom(ent => ent.Questions.QuestionGroupRelations.Count > 0 ?

@@ -13,5 +13,6 @@ namespace EvaluacionDesempenoApi.Services.Interfaces
         List<EmployeeDto> GetEmployeesEvaluations(SearchEmployeesDto data);
 
         Task<DashboardEvaluationOneDto> GetEmployeesFromRecordsAsync(SearchEmployeesDto data);
+        Task<List<EmployeeDto>> GetAllEmployeesWithUsers();
     }
 }

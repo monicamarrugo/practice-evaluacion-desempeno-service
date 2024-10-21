@@ -18,6 +18,7 @@ namespace EvaluacionDesempenoApi.Data.Repositories
             return _dbContext.Set<T>().AsQueryable();
         }
 
+
         public T GetById(int id)
         {
             return  _dbContext.Set<T>().Find(id);

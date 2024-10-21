@@ -36,6 +36,7 @@ namespace EvaluacionDesempenoApi.Data.Context
         public DbSet<Users> Users { get; set; }
         public DbSet<Profiles> Profiles { get; set; }
         public DbSet<UsersProfiles> UsersProfiles { get; set; }
+        public DbSet<Languages> Languages { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

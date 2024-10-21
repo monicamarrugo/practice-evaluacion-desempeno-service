@@ -1,6 +1,7 @@
 ﻿using EvaluacionDesempenoApi.Data.Context;
 using EvaluacionDesempenoApi.Models.Entities;
 using EvaluacionDesempenoApi.Services.DTOs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace EvaluacionDesempenoApi.Data.Repositories
@@ -8,16 +9,44 @@ namespace EvaluacionDesempenoApi.Data.Repositories
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public EmployeeRepository(ApplicationDbContext dbContext)
+        public EmployeeRepository(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
         }
         public List<Employees> GetAllIncludes()
         {
             return _dbContext.Employees.Include(p => p.Positions)
-                .Include(d => d.Divisions).Include(s => s.Responsible)
-                .Include(e => e.ApplicationUser).ToList();
+                .Include(d => d.Divisions).Include(s => s.Responsible).ToList();
+        }
+        public async Task<List<EmployeeDto>> GetAllWithUser()
+        {
+            var employeeDtos = await (
+               from employee in _dbContext.Employees
+               join user in _userManager.Users on employee.IdEmployees equals user.IdEmployee into userGroup
+               from user in userGroup.DefaultIfEmpty()  // Left join para empleados sin usuario
+               select new EmployeeDto
+               {
+                   idEmployees = employee.IdEmployees,
+                   idPosition = employee.IdPosition,
+                   namePosition = employee.Positions.NamePosition,
+                   names = employee.Names,
+                   lastNames = employee.LastNames,
+                   sex = employee.Sex,
+                   email = employee.Email,
+                   iDResponsible = employee.IDResponsible,
+                   nameResponsible = employee.Responsible != null ? employee.Responsible.Names : null,
+                   cdDivisions = employee.Divisions.CdDivisions,
+                   nameDivisions = employee.Divisions.Name,
+                   identification = employee.Identification,
+                   enabled = employee.Enabled,
+                   userId = user != null ? user.Id : (int?)null
+               }
+           ).ToListAsync();
+
+            return employeeDtos;
         }
         public List<Employees> GetAllIncludesByResponsible(int idResponsible)
         {

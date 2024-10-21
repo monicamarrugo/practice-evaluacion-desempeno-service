@@ -119,6 +119,8 @@ public class Program
         builder.Services.AddScoped<IFlagTypeService, FlagTypeService>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IProfileService, ProfileService>();
+        builder.Services.AddScoped<ILanguageService, LanguageService>();
+        builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 
 
 

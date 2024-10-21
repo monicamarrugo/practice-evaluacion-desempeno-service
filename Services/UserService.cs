@@ -1,8 +1,10 @@
 ﻿using Azure;
+using Azure.Core;
 using EvaluacionDesempenoApi.Data.Repositories;
 using EvaluacionDesempenoApi.Models.Entities;
 using EvaluacionDesempenoApi.Services.DTOs;
 using EvaluacionDesempenoApi.Services.Interfaces;
+using EvaluacionDesempenoApi.Util.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics.Metrics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace EvaluacionDesempenoApi.Services
@@ -18,19 +21,21 @@ namespace EvaluacionDesempenoApi.Services
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IConfiguration _configuration;
+        private readonly IEncryptionService _encryptionService;
         private readonly IGenericRepository<UsersProfiles> _repository;
         private readonly IUsersProfilesRepository _usersProfilesRepository;
+        private readonly IConfiguration _configuration;
         public UserService(UserManager<ApplicationUser> userManager,
-            IConfiguration configuration,
+            IEncryptionService encryptionService,
             IGenericRepository<UsersProfiles> repository,
-            IUsersProfilesRepository usersProfilesRepository)
+            IUsersProfilesRepository usersProfilesRepository,
+            IConfiguration configuration)
         {
             _userManager = userManager;
-            _configuration = configuration;
+            _encryptionService = encryptionService;
             _repository = repository;
             _usersProfilesRepository = usersProfilesRepository;
-
+            _configuration = configuration;
         }
         public async Task<UserDto> GetUserById(int id)
         {
@@ -73,12 +78,15 @@ namespace EvaluacionDesempenoApi.Services
                     response.errorDetail = "El Usuario ya existe!";
                     return response;
                 }
+                var decryptedPassword = _encryptionService.Decrypt(registerDto.password);
+                registerDto.password = decryptedPassword;
 
                 var user = new ApplicationUser
                 {
                     UserName = registerDto.username,
                     AltName = registerDto.altName,
                     AltEmail = registerDto.altEmail,
+                    Email = registerDto.altEmail,
                     CdLanguage = registerDto.cdLanguage,
                     IndEnabled = true // Por defecto el usuario está habilitado
                 };
@@ -271,6 +279,8 @@ namespace EvaluacionDesempenoApi.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        
 
     }
 }
