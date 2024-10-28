@@ -8,5 +8,8 @@
         public string? altName { get; set; }
         public string? altEmail { get; set; }
         public string cdLanguage { get; set; }
+
+        public bool indChangePassword { get; set; }
+        public bool IndEnabled { get; set;}
     }
 }

@@ -6,8 +6,8 @@ namespace EvaluacionDesempenoApi.Models.Entities
     {
         public int? IdEmployee { get; set; }
         public bool IndEnabled { get; set; }
-        public string AltName { get; set; }
-        public string AltEmail { get; set; }
+        public string? AltName { get; set; }
+        public string? AltEmail { get; set; }
         public string CdLanguage { get; set; }
         public bool IndChangePassword { get; set; }
 

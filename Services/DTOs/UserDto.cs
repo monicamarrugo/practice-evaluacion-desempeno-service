@@ -7,5 +7,6 @@
         public string altEmail { get; set; }
         public string cdLanguage { get; set; }
         public bool indEnabled { get; set; }
+        public bool indChangePassword { get; set; }
     }
 }

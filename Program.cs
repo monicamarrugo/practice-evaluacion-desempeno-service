@@ -56,11 +56,17 @@ public class Program
         var configuration = builder.Configuration;
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
- options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+            .EnableSensitiveDataLogging() // Esto activa el logging detallado
+           .LogTo(Console.WriteLine)); // Envía los logs a la consola;
 
         builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
+
+        builder.Services.AddScoped<UserManager<ApplicationUser>>();
+        builder.Services.AddScoped<SignInManager<ApplicationUser>>();
+        builder.Services.AddScoped<ApplicationDbContext>();
 
         var jwtSettings = configuration.GetSection("Jwt");
 
@@ -117,6 +123,7 @@ public class Program
         builder.Services.AddScoped<IFlagService, FlagService>();
         builder.Services.AddScoped<IColorService, ColorService>();
         builder.Services.AddScoped<IFlagTypeService, FlagTypeService>();
+       ;
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IProfileService, ProfileService>();
         builder.Services.AddScoped<ILanguageService, LanguageService>();

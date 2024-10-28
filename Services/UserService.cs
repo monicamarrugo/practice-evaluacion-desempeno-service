@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -71,7 +72,7 @@ namespace EvaluacionDesempenoApi.Services
             {
 
                 // Verificar si el usuario ya existe
-                var existingUser = await _userManager.FindByNameAsync(registerDto.username);
+                var existingUser = await CheckIfUserExists(registerDto.username);
                 if (existingUser != null)
                 {
                     response.error = "SI";
@@ -81,6 +82,32 @@ namespace EvaluacionDesempenoApi.Services
                 var decryptedPassword = _encryptionService.Decrypt(registerDto.password);
                 registerDto.password = decryptedPassword;
 
+                
+                return await CreateUser(registerDto);
+
+                
+            }
+            catch (Exception ex)
+            {
+                var detailedError = $"Error: {ex.Message}. StackTrace: {ex.StackTrace}";
+                Debug.WriteLine(detailedError);  // Para tener más detalles en la consola de debug
+                response.error = "SI";
+                response.errorDetail = detailedError;
+                return response;
+            }
+
+
+        }
+        private async Task<ApplicationUser> CheckIfUserExists(string username)
+        {
+            return await _userManager.FindByNameAsync(username);
+        }
+        private async Task<ResponseTransaction> CreateUser(UserRegisterDto registerDto)
+        {
+            ResponseTransaction response = new ResponseTransaction();
+
+            try
+            {
                 var user = new ApplicationUser
                 {
                     UserName = registerDto.username,
@@ -88,7 +115,9 @@ namespace EvaluacionDesempenoApi.Services
                     AltEmail = registerDto.altEmail,
                     Email = registerDto.altEmail,
                     CdLanguage = registerDto.cdLanguage,
-                    IndEnabled = true // Por defecto el usuario está habilitado
+                    IdEmployee = registerDto.idEmployee,
+                    IndChangePassword = registerDto.indChangePassword,
+                    IndEnabled = true
                 };
 
                 var result = await _userManager.CreateAsync(user, registerDto.password);
@@ -99,20 +128,20 @@ namespace EvaluacionDesempenoApi.Services
                     response.IsIdentityError = true;
                     response.errorsIdentity = result.Errors;
                 }
+                else
+                {
+                    response.error = "NO";
+                    response.message = "Usuario registrado exitosamente!";
+                }
 
-                response.error = "NO";
-                response.message = "Usuario registrado exitosamentge!";
                 return response;
             }
             catch (Exception ex)
             {
-
                 response.error = "SI";
                 response.errorDetail = ex.Message;
                 return response;
             }
-
-
         }
 
         public async Task<ResponseTransaction> UpdateUser(int id, UserDto userDto)
@@ -131,6 +160,7 @@ namespace EvaluacionDesempenoApi.Services
                 user.AltEmail = userDto.altEmail;
                 user.CdLanguage = userDto.cdLanguage;
                 user.IndEnabled = userDto.indEnabled;
+                user.IndChangePassword = userDto.indChangePassword;
 
                 var result = await _userManager.UpdateAsync(user);
                 if (!result.Succeeded)
@@ -139,10 +169,13 @@ namespace EvaluacionDesempenoApi.Services
                     response.IsIdentityError = true;
                     response.errorsIdentity = result.Errors;
                 }
-
-                response.error = "NO";
-                response.message = "Usuario actualizado exitosamentge!";
+                else {
+                    response.error = "NO";
+                    response.message = "Usuario actualizado exitosamentge!";
+                  
+                }
                 return response;
+
             }
             catch (Exception ex)
             {
@@ -197,9 +230,7 @@ namespace EvaluacionDesempenoApi.Services
             ResponseTransaction response = new ResponseTransaction();
             try
             {
-                var user = await _userManager.Users
-                    .Include(u => u.Employees)
-                     .FirstOrDefaultAsync(u => u.UserName == loginDto.username);
+                var user = await CheckIfUserExists(loginDto.username);
 
                 if (user == null)
                 {
@@ -207,6 +238,13 @@ namespace EvaluacionDesempenoApi.Services
                     response.errorDetail = "Credenciales Inválidas!";
                     return response;
                 }
+
+                // Cargar explícitamente la entidad relacionada Employees
+                //await _context.Entry(user).Reference(u => u.Employees).LoadAsync();
+                
+
+                var decryptedPassword = _encryptionService.Decrypt(loginDto.password);
+                loginDto.password =  decryptedPassword;
 
                 var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginDto.password);
                 if (!isPasswordValid)
@@ -218,9 +256,11 @@ namespace EvaluacionDesempenoApi.Services
 
 
 
-                // Aquí generarás el JWT (luego te muestro cómo hacerlo)
+                user = await _usersProfilesRepository.GetEmployee(user);
                 var token = await GenerateJwtToken(user);
+                response.error = "NO";
                 response.response = token;
+                response.message = "Usuario verificado exitosamente!";
                 return response;
             }
             catch (Exception ex)
@@ -280,7 +320,32 @@ namespace EvaluacionDesempenoApi.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        
+        public async Task<UserDto> GetUserByEmployeeId(int idEmployee)
+        {
+            try
+            {
+                UserDto userDto = null;
+                // Obtener el usuario relacionado con el IdEmployee
+                var user = await _userManager.Users
+                    .FirstOrDefaultAsync(u => u.IdEmployee == idEmployee);
+
+                if (user != null)
+                {
+                    userDto = new UserDto();
+                    userDto.username = user.UserName;
+                    userDto.altName = user.AltName;
+                    userDto.altEmail = user.AltEmail;
+                    userDto.cdLanguage = user.CdLanguage;
+                    userDto.indEnabled = user.IndEnabled;
+                };
+
+                return userDto;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message + ex.StackTrace);
+            }
+        }
 
     }
 }

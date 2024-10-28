@@ -13,5 +13,6 @@ namespace EvaluacionDesempenoApi.Services.Interfaces
 
         Task<ResponseTransaction> ChangePassword(ChangePasswordDto changePasswordDto);
         Task<ResponseTransaction> Login(UserLoginDto loginDto);
+        Task<UserDto> GetUserByEmployeeId(int idEmployee);
     }
 }

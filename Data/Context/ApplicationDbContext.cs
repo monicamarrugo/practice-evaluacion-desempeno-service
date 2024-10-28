@@ -33,7 +33,7 @@ namespace EvaluacionDesempenoApi.Data.Context
         public DbSet<FlagRules> FlagRules { get; set; }
         public DbSet<Colors> Colors { get; set; }
         public DbSet<FlagTypes> FlagTypes { get; set; }
-        public DbSet<Users> Users { get; set; }
+        public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<Profiles> Profiles { get; set; }
         public DbSet<UsersProfiles> UsersProfiles { get; set; }
         public DbSet<Languages> Languages { get; set; }

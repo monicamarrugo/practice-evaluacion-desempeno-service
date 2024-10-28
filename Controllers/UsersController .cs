@@ -21,11 +21,11 @@ namespace EvaluacionDesempenoApi.Controllers
             _userService = userService; 
             _languageService = languageService;
         }
-        
+        [Authorize]
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegisterDto registerDto)
         {
-            var responseCreate = _userService.Register(registerDto);
+            var responseCreate = await _userService.Register(registerDto);
             return Ok(responseCreate);
         }   
 
@@ -57,7 +57,7 @@ namespace EvaluacionDesempenoApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginDto loginDto)
         {
-            var responseLogin = _userService.Login(loginDto);
+            var responseLogin = await _userService.Login(loginDto);
             return Ok(responseLogin);
         }
 
@@ -66,6 +66,15 @@ namespace EvaluacionDesempenoApi.Controllers
         {
             var languages = this._languageService.GetAllLanguages();
             return Ok(languages);
+        }
+
+        [Authorize]
+        [HttpGet("userByEmployee/{idEmployee}")]
+        public async Task<IActionResult> GetUserByEmployeeId(int idEmployee)
+        {
+            var usuario = _userService.GetUserByEmployeeId(idEmployee);
+
+            return Ok(usuario);
         }
     }
 }
