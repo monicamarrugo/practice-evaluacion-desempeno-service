@@ -5,6 +5,7 @@ using EvaluacionDesempenoApi.Services.DTOs;
 using EvaluacionDesempenoApi.Services.Enums;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using static Azure.Core.HttpHeader;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EvaluacionDesempenoApi.Services
 {
@@ -28,11 +29,20 @@ namespace EvaluacionDesempenoApi.Services
             employees = _mapper.Map<List<EmployeeDto>>(entities);
             return employees;
         }
-        public async Task<List<EmployeeDto>> GetAllEmployeesWithUsers()
+        public async Task<PaginatedList<EmployeeDto>> GetAllEmployeesWithUsers(int pageNumber, int pageSize)
         {
             List<EmployeeDto> employees = new List<EmployeeDto>();
-            employees = await _employeesRepository.GetAllWithUser();
-            return employees;
+            employees = await _employeesRepository.GetAllWithUser(pageNumber, pageSize);
+
+            var totalRecords = employees.Count();
+            var paginatedData = employees
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+            var paginated = new PaginatedList<EmployeeDto>(paginatedData, totalRecords, pageNumber, pageSize);
+
+            return paginated;
         }
 
         public List<EmployeeDto> GetAllEmployeesByResponsible(int idResponsible)
@@ -46,7 +56,7 @@ namespace EvaluacionDesempenoApi.Services
         public List<EmployeeDto> GetEmployeesEvaluations(SearchEmployeesDto data)
         {
             List<EmployeeDto> employees = new List<EmployeeDto>();
-            var entities = _employeesRepository.GetAllIncludesByResponsible(data.idResponsible);
+            var entities = _employeesRepository.GetAllIncludesByResponsible(data.idResponsible.Value);
             employees = _mapper.Map<List<EmployeeDto>>(entities);
             employees.ForEach(e => {
                 if ((data.cdDivisions == null || e.cdDivisions == data.cdDivisions) 
@@ -73,7 +83,15 @@ namespace EvaluacionDesempenoApi.Services
 
         }
 
-            public EmployeeDto GetById(int id)
+        public async Task<PaginatedList<EvaluatorRecordDto>> GetEvaluatorRecords(SearchEmployeesDto data)
+        {
+            var evaluators = await _employeesRepository.GetEvaluatorRecords(data);
+
+            return evaluators;
+
+        }
+
+        public EmployeeDto GetById(int id)
         {
             EmployeeDto employee = new EmployeeDto();
             var entity = _employeesRepository.GetByIdIncludes(id);
@@ -90,6 +108,7 @@ namespace EvaluacionDesempenoApi.Services
             employee.nameDivisions = entity.Divisions.Name;
             employee.identification = entity.Identification;
             employee.enabled = entity.Enabled;
+            employee.cdArea = entity.CdArea;
             
             return employee;
 
@@ -102,6 +121,13 @@ namespace EvaluacionDesempenoApi.Services
 
                 response.error = "SI";
                 response.errorDetail = "Faltan datos del empleado";
+                return response;
+            }
+            if (_employeesRepository.Exists(employee.identification))
+            {
+
+                response.error = "SI";
+                response.errorDetail = "Existe un empleado con el numero de identificación!";
                 return response;
             }
             try
@@ -117,6 +143,7 @@ namespace EvaluacionDesempenoApi.Services
                     IDResponsible = employee.iDResponsible,
                     CdDivisions = employee.cdDivisions,
                     Identification = employee.identification,
+                    CdArea = employee.cdArea,
                     Enabled = true
                 };
 
@@ -148,8 +175,8 @@ namespace EvaluacionDesempenoApi.Services
                     Email = employee.email,
                     IDResponsible = employee.iDResponsible,
                     CdDivisions = employee.cdDivisions,
-                    Identification = employee.identification,
-                    Enabled = employee.enabled
+                    Enabled = employee.enabled,
+                    CdArea= employee.cdArea
                 };
 
                 _employeesGenericRepository.Update(Employee);

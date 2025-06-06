@@ -25,10 +25,10 @@ namespace EvaluacionDesempenoApi.Services
             _mapper = mapper;
         }
 
-        public CreateEvaluationRecordDto GetRecordTempById(int idEvaluationsRecord)
+        public async Task<CreateEvaluationRecordDto> GetRecordTempById(int idEvaluationsRecord)
         {
             CreateEvaluationRecordDto evaluationRecord = new CreateEvaluationRecordDto();
-            var entity = _recordRepository.GetRecordsTemp(idEvaluationsRecord);
+            var entity = await _recordRepository.GetRecordsTemp(idEvaluationsRecord);
             if (entity != null)
             {
                 var record = _mapper.Map<EvaluationRecordDto>(entity);
@@ -40,12 +40,12 @@ namespace EvaluacionDesempenoApi.Services
             return evaluationRecord;
         }
 
-        public CreateEvaluationRecordDto GetRecordById(int idEvaluationsRecord)
+        public async Task<CreateEvaluationRecordDto> GetRecordById(int idEvaluationsRecord)
         {
             try
             {
                 CreateEvaluationRecordDto evaluationRecord = new CreateEvaluationRecordDto();
-                var entity = _recordRepository.GetRecords(idEvaluationsRecord);
+                var entity = await _recordRepository.GetRecords(idEvaluationsRecord);
                 if (entity != null)
                 {
                     var record = _mapper.Map<EvaluationRecordDto>(entity);
@@ -143,8 +143,9 @@ namespace EvaluacionDesempenoApi.Services
             try
             {
                 _recordRepository.FinishRecords(recordData);
-               
-                if(recordData.evaluationRecord.idEvaluationRecord != null 
+                var idRecord = _recordRepository.GetIdRecords(recordData);
+
+                if (recordData.evaluationRecord.idEvaluationRecord != null 
                     && recordData.evaluationRecord.idEvaluationRecord != 0)
                 {
                     var detailsTemp = _mapper.Map<List<RecordDetailsTemp>>(recordData.recordDetails);
@@ -154,6 +155,7 @@ namespace EvaluacionDesempenoApi.Services
 
                 response.error = "NO";
                 response.message = "El registro fue finalizado exitosamente!";
+                response.response = idRecord.ToString();
                 return response;
 
             }
@@ -163,6 +165,14 @@ namespace EvaluacionDesempenoApi.Services
                 response.errorDetail = ex.Message;
                 return response;
             }
+        }
+
+        public async Task<PaginatedList<EvaluatorRecordDto>> GetEvaluatorRecordsByParams(SearchEmployeesDto data)
+        {
+            var evaluators = await _recordRepository.GetEvaluatorRecordsByParams(data);
+
+            return evaluators;
+
         }
 
         public ResponseTransaction SaveRecordKpi(CreateEvaluationKpiRecordDto recordData)

@@ -22,13 +22,7 @@ public class Program
     public static void Main(string[] args)
     {
         string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .Enrich.FromLogContext()
-            .WriteTo.File(new RenderedCompactJsonFormatter(), "logs/log.txt")
-            .CreateLogger();
-
+       
         var mapperConfig = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<MappingProfile>();
@@ -89,6 +83,21 @@ public class Program
             };
         });
 
+        Log.Logger = new LoggerConfiguration()
+      .ReadFrom.Configuration(builder.Configuration)
+      .Enrich.FromLogContext()
+      .Enrich.WithEnvironmentName()
+      .WriteTo.Console()
+      .WriteTo.File("logs/log-.txt", 
+                    rollingInterval: RollingInterval.Day,
+                    fileSizeLimitBytes: 5 * 1024 * 1024,
+                    rollOnFileSizeLimit: true,
+                    restrictedToMinimumLevel: LogEventLevel.Warning)  // Cambia a Error
+      .Filter.ByExcluding(logEvent =>
+        logEvent.Properties.TryGetValue("SourceContext", out var source) &&
+        source.ToString().Contains("Microsoft.AspNetCore"))
+      .CreateLogger();
+        builder.Host.UseSerilog();
         // Add services to the container.
         builder.Services.AddControllers();
         // Configurar el BlobServiceClient con la cadena de conexión de Azure Blob Storage
@@ -131,14 +140,18 @@ public class Program
 
 
 
-
-        builder.Services.AddCors(options => {
-            options.AddPolicy(MyAllowSpecificOrigins,
-            builder => builder.WithOrigins("*")
-                   .AllowAnyMethod()
-                   .AllowAnyHeader()
-                );
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+                policy =>
+                {
+                    policy.WithOrigins("http://10.125.12.130:8094", "http://localhost:4200", "https://procesosrh.ti-films.com")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                });
         });
+
         builder.Services.Configure<IISServerOptions>(options =>
         {
             options.AllowSynchronousIO = true;
@@ -158,7 +171,7 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+        app.UseSerilogRequestLogging();
 
         app.UseHttpsRedirection();
         app.UseAuthentication();    

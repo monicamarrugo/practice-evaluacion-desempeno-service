@@ -9,7 +9,9 @@ namespace EvaluacionDesempenoApi.Services.Interfaces
         ResponseTransaction SaveRecordKpi(CreateEvaluationKpiRecordDto recordData);
 
         ResponseTransaction FinishEvaluation(CreateEvaluationRecordDto recordData);
-        CreateEvaluationRecordDto GetRecordById(int idEvaluationsRecord);
-        CreateEvaluationRecordDto GetRecordTempById(int idEvaluationsRecord);
+        Task<CreateEvaluationRecordDto> GetRecordById(int idEvaluationsRecord);
+        Task<CreateEvaluationRecordDto> GetRecordTempById(int idEvaluationsRecord);
+
+        Task<PaginatedList<EvaluatorRecordDto>> GetEvaluatorRecordsByParams(SearchEmployeesDto data);
     }
 }

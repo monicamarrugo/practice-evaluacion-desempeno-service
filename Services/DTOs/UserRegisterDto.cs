@@ -1,4 +1,6 @@
-﻿namespace EvaluacionDesempenoApi.Services.DTOs
+﻿using EvaluacionDesempenoApi.Models.Entities;
+
+namespace EvaluacionDesempenoApi.Services.DTOs
 {
     public class UserRegisterDto
     {
@@ -10,6 +12,8 @@
         public string cdLanguage { get; set; }
 
         public bool indChangePassword { get; set; }
-        public bool IndEnabled { get; set;}
+        public bool indEnabled { get; set;}
+
+        public List<UserProfileDto> usersProfiles { get; set; }
     }
 }

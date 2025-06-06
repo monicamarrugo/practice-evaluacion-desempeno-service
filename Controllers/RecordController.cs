@@ -36,17 +36,24 @@ namespace EvaluacionDesempenoApi.Controllers
         }
 
         [HttpGet("getRecordTempById")]
-        public IActionResult GetRecordTempById([FromQuery] int id)
+        public async Task<IActionResult> GetRecordTempById([FromQuery] int id)
         {
-            var evaluation = this._recordService.GetRecordTempById(id);
+            var evaluation = await this._recordService.GetRecordTempById(id);
             return Ok(evaluation);
         }
 
         [HttpGet("getRecordById")]
-        public IActionResult GetRecordById([FromQuery] int id)
+        public async Task<IActionResult> GetRecordById([FromQuery] int id)
         {
-            var evaluation = this._recordService.GetRecordById(id);
+            var evaluation = await this._recordService.GetRecordById(id);
             return Ok(evaluation);
+        }
+
+        [HttpPost("listEvaluatorRecordsByParams")]
+        public async Task<IActionResult> GetEvaluatorRecords([FromBody] SearchEmployeesDto dataSearch)
+        {
+            var employees = await this._recordService.GetEvaluatorRecordsByParams(dataSearch);
+            return Ok(employees);
         }
     }
 }

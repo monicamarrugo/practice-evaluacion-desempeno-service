@@ -11,7 +11,7 @@ namespace EvaluacionDesempenoApi.Services.DTOs
         public string names { get; set; }
         public string lastNames { get; set; }
         public string sex { get; set; }
-        public string email { get; set; }
+        public string? email { get; set; }
         public int? iDResponsible { get; set; }
         public string? nameResponsible { get; set; }
         public string cdDivisions { get; set; } 
@@ -21,5 +21,8 @@ namespace EvaluacionDesempenoApi.Services.DTOs
 
         public bool applyEvaluations { get; set; }
         public int? userId { get; set; }
+
+        public string? cdArea { get; set; }
+        public string? nameArea { get; set; }
     }
 }

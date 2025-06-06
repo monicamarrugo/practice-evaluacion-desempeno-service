@@ -1,5 +1,6 @@
 ﻿using EvaluacionDesempenoApi.Data.Context;
 using EvaluacionDesempenoApi.Models.Entities;
+using EvaluacionDesempenoApi.Services.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -22,6 +23,30 @@ namespace EvaluacionDesempenoApi.Data.Repositories
                .ToListAsync();
 
             return userProfiles;
+        }
+
+        public async Task<List<UsersProfiles>> GetProfilesEntityByUserID(int userId)
+        {
+            var userProfiles = await _dbContext.UsersProfiles.Include( p => p.Profiles)
+               .Where(up => up.IdUser == userId)
+               .ToListAsync();
+
+            return userProfiles;
+        }
+
+        public async Task<Boolean> RemoveProfile(UserProfileDto profileDto)
+        {
+            var userProfile = await _dbContext.UsersProfiles
+               .FirstOrDefaultAsync(up => up.IdUser == profileDto.idUser && up.CdProfile == profileDto.cdProfile);
+
+            if (userProfile != null)
+            {
+                // Remover la relación
+                _dbContext.UsersProfiles.Remove(userProfile);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
         public async Task<ApplicationUser> GetUser(string username)
         {

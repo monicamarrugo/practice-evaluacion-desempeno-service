@@ -28,16 +28,16 @@ namespace EvaluacionDesempenoApi.Controllers
         }
 
         [HttpGet("configQuestionaryByIdQuestionary")]
-        public IActionResult GetConfigByQuestionary(int id)
+        public async Task<IActionResult>  GetConfigByQuestionary(int id)
         {
-            var types = this._questionaryConfigService.GetByQuestionary(id);
+            var types = await this._questionaryConfigService.GetByQuestionary(id);
             return Ok(types);
         }
 
         [HttpGet("configQuestionaryToRecord")]
-        public IActionResult GetConfigToRecord(int id)
+        public async Task<IActionResult> GetConfigToRecord(int id)
         {
-            var types = this._questionaryConfigService.GetQuestionaryToRecord(id);
+            var types =  await this._questionaryConfigService.GetQuestionaryToRecord(id);
             return Ok(types);
         }
 

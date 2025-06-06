@@ -21,19 +21,19 @@ namespace EvaluacionDesempenoApi.Services
             _questionariesConfigRepository = questionariesConfigRepository;
             _mapper = mapper;
         }
-        public List<QuestionariesConfigDto> GetByQuestionary(int idQuestionary)
+        public async Task<List<QuestionariesConfigDto>> GetByQuestionary(int idQuestionary)
         {
             List<QuestionariesConfigDto> configs = new List<QuestionariesConfigDto>();
-            var entities = _questionariesConfigRepository.GetByQuestionaryIncludes(idQuestionary);
+            var entities = await _questionariesConfigRepository.GetByQuestionaryIncludes(idQuestionary);
 
             configs = _mapper.Map<List<QuestionariesConfigDto>>(entities);
             return configs;
         }
 
-        public List<RecordDetailsDto> GetQuestionaryToRecord(int idQuestionary)
+        public async Task<List<RecordDetailsDto>> GetQuestionaryToRecord(int idQuestionary)
         {
             List<RecordDetailsDto> configsRecords = new List<RecordDetailsDto>();
-            var entities = _questionariesConfigRepository.GetByQuestionaryIncludes(idQuestionary);
+            var entities = await _questionariesConfigRepository.GetByQuestionaryIncludes(idQuestionary);
 
             configsRecords = _mapper.Map<List<RecordDetailsDto>>(entities);
             return configsRecords;

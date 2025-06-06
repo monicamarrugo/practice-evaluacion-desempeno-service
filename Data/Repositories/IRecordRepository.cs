@@ -7,11 +7,14 @@ namespace EvaluacionDesempenoApi.Data.Repositories
     {
         void UpdateRecordEvaluation(CreateEvaluationRecordDto recordData);
 
-        EvaluationRecord GetRecordsTemp(int idEvaluationsRecord);
-        EvaluationRecord GetRecords(int idEvaluationsRecord);
+        Task<EvaluationRecord> GetRecordsTemp(int idEvaluationsRecord);
+        Task<EvaluationRecord> GetRecords(int idEvaluationsRecord);
         EvaluationRecord GetRecordsTemp(CreateEvaluationRecordDto recordData);
         void RemoveTemp(List<RecordDetailsTemp> records);
 
         void FinishRecords(CreateEvaluationRecordDto recordData);
+        int GetIdRecords(CreateEvaluationRecordDto recordData);
+
+        Task<PaginatedList<EvaluatorRecordDto>> GetEvaluatorRecordsByParams(SearchEmployeesDto data);
     }
 }

@@ -32,7 +32,6 @@ namespace EvaluacionDesempenoApi.Controllers
             var fileDto = JsonSerializer.Deserialize<FileDto>(dto);
             ResponseTransaction responseCreate = new ResponseTransaction();
 
-            // Handle the file and DTO as needed
             if (file != null && file.Length > 0 && fileDto != null)
             {
                 responseCreate = await _blobService.UploadBlobAsync(fileDto, file);

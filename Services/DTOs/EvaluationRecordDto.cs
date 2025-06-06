@@ -11,7 +11,11 @@ namespace EvaluacionDesempenoApi.Services.DTOs
         public int? idEmployee { get; set; }
         public int idEvaluations { get; set; }
         public DateTimeOffset? startDate { get; set; }
+        public DateTimeOffset? startDateLocal { get; set; }
         public DateTimeOffset? endDate { get; set; }
+        public DateTimeOffset? endDateLocal { get; set; }
+
+        public string? timeZone { get; set; }
         public string? cdEvaluationStates { get; set; }
         public decimal? finalCalification { get; set; }
 
@@ -24,6 +28,15 @@ namespace EvaluacionDesempenoApi.Services.DTOs
         public string? descriptionFlag { get; set; }
 
         public string? colorFlag { get; set; }
+
+        public string cdArea { get; set; }
+
+        public string? cdDivisions { get; set; }
+
+        public int? idPosition { get; set; }
+        public string namePosition { get; set; }
+        public string nameArea { get; set; }
+        public string nameEmployee { get; set; }
         public string? createUser { get; set; }
         public DateTimeOffset? createDate { get; set; }
         public string? modifiedUser { get; set; }

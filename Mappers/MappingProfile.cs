@@ -37,7 +37,8 @@ namespace EvaluacionDesempenoApi.Mappers
             CreateMap<Employees, EmployeeDto>()
            .ForMember(dto => dto.namePosition, opt => opt.MapFrom(ent => ent.Positions.NamePosition))
            .ForMember(dto => dto.nameDivisions, opt => opt.MapFrom(ent => ent.Divisions.Name))
-           .ForMember(dto => dto.nameResponsible, opt => opt.MapFrom(ent => ent.Responsible.Names + " " + ent.Responsible.LastNames));
+           .ForMember(dto => dto.nameResponsible, opt => opt.MapFrom(ent => ent.Responsible.Names + " " + ent.Responsible.LastNames))
+           .ForMember(dto => dto.nameArea, opt => opt.MapFrom(ent => ent.Areas.NameArea));
 
             CreateMap<EvaluationRecordDto, EvaluationRecord>();
             CreateMap<EvaluationRecord, EvaluationRecordDto>();
@@ -67,6 +68,16 @@ namespace EvaluacionDesempenoApi.Mappers
                         ent.Questions.QuestionGroupRelations.FirstOrDefault().Groups.NameEN : "Ninguno..."))
                  .ForMember(dto => dto.descriptionES, opt => opt.MapFrom(ent => ent.Questions.DescriptionES))
                  .ForMember(dto => dto.descriptionEN, opt => opt.MapFrom(ent => ent.Questions.DescriptionEN));
+
+            CreateMap<UsersProfiles, UserProfileDto>()
+           .ForMember(dto => dto.profileNameES, opt => opt.MapFrom(ent => ent.Profiles.ProfileNameES))
+           .ForMember(dto => dto.profileNameEN, opt => opt.MapFrom(ent => ent.Profiles.ProfileNameEN));
+
+            CreateMap<Profiles, UserProfileDto>();
+            CreateMap<UserProfileDto, UsersProfiles>();
+            CreateMap<UserRegisterDto, ApplicationUser>();
+            CreateMap<ApplicationUser, UserRegisterDto>();
         }
     }
 }
+

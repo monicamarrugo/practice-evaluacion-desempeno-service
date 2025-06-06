@@ -9,7 +9,7 @@ namespace EvaluacionDesempenoApi.Services.Interfaces
         EvaluationsDto GetEvaluationsById(int idEvaluations);
 
         EvaluationCreateDto GetEvaluationsByIdInclude(int idEvaluations);
-        ActiveEvaluationsDto GetActiveEvaluation(SearchActiveEvaluationDto dataSearch);
+        Task<ActiveEvaluationsDto> GetActiveEvaluation(SearchActiveEvaluationDto dataSearch);
 
         ResponseTransaction SaveEvaluation(EvaluationCreateDto evaluationData);
 

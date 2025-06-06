@@ -25,6 +25,10 @@ namespace EvaluacionDesempenoApi.Models.Entities
         public string? Identification { get; set;}
         public bool Enabled { get; set; }
 
+        public string? CdArea { get; set; }
+
+        public Areas Areas { get; set; }
+
         [JsonIgnore]
         public ICollection<Employees> Subordinates { get; set; }
 

@@ -22,9 +22,9 @@ namespace EvaluacionDesempenoApi.Controllers
         }
 
         [HttpGet("listEmployeesWithUsers")]
-        public IActionResult GetAllEmployeesWithUsers()
+        public async Task<IActionResult> GetAllEmployeesWithUsers(int pageNumber, int pageSize)
         {
-            var employees = this._employeeService.GetAllEmployeesWithUsers();
+            var employees = await this._employeeService.GetAllEmployeesWithUsers(pageNumber, pageSize);
             return Ok(employees);
         }
 
@@ -39,6 +39,13 @@ namespace EvaluacionDesempenoApi.Controllers
         public async Task<IActionResult> GetEmployeesEvaluations([FromBody]  SearchEmployeesDto dataSearch)
         {
             var employees = await  this._employeeService.GetEmployeesFromRecordsAsync(dataSearch);
+            return Ok(employees);
+        }
+
+        [HttpPost("listEvaluatorRecords")]
+        public async Task<IActionResult> GetEvaluatorRecords([FromBody] SearchEmployeesDto dataSearch)
+        {
+            var employees = await this._employeeService.GetEvaluatorRecords(dataSearch);
             return Ok(employees);
         }
 

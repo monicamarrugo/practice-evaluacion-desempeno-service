@@ -23,12 +23,12 @@ namespace EvaluacionDesempenoApi.Services
         }
 
 
-        public ActiveEvaluationsDto GetActiveEvaluation(SearchActiveEvaluationDto dataSearch)
+        public async Task<ActiveEvaluationsDto> GetActiveEvaluation(SearchActiveEvaluationDto dataSearch)
         {
             List<Evaluations> entities = new List<Evaluations>();
             List<EvaluationsDto> evaluations = new List<EvaluationsDto>();
             ActiveEvaluationsDto activeEvaluationsDto = new ActiveEvaluationsDto();
-            entities = _evaluationsRepository.GetActiveEvaluations(dataSearch);
+            entities = await  _evaluationsRepository.GetActiveEvaluations(dataSearch);
             evaluations = _mapper.Map<List<EvaluationsDto>>(entities);
             activeEvaluationsDto.evaluations = evaluations;
             activeEvaluationsDto.numTotalEvaluations = entities.Count;

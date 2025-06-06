@@ -28,9 +28,9 @@ namespace EvaluacionDesempenoApi.Controllers
         }
 
         [HttpPost("listActiveEvaluations")]
-        public IActionResult GetListActiveEvaluations([FromBody] SearchActiveEvaluationDto dataSearch)
+        public async Task<IActionResult> GetListActiveEvaluations([FromBody] SearchActiveEvaluationDto dataSearch)
         {
-            var evaluations = this._evaluationService.GetActiveEvaluation(dataSearch);
+            var evaluations = await this._evaluationService.GetActiveEvaluation(dataSearch);
             return Ok(evaluations);
         }
 

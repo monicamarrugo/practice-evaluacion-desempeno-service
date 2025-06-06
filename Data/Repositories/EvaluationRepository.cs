@@ -16,21 +16,22 @@ namespace EvaluacionDesempenoApi.Data.Repositories
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public List<Evaluations> GetActiveEvaluations(SearchActiveEvaluationDto dataSearch)
+        public async Task<List<Evaluations>> GetActiveEvaluations(SearchActiveEvaluationDto dataSearch)
         {
-            return _dbContext.Evaluations
+            return await _dbContext.Evaluations
                 .Include(e => e.EvaluationsPositions)
                 .Include(s => s.Escales).ThenInclude(v => v.EscalesValues)
                 .Where(e =>
                             (e.IndEnabled == true)
                             &&
-                            ((e.StartDate == null) || (dataSearch.currentDate >= e.StartDate) && (dataSearch.currentDate <= e.EndDate))
+                            ((e.StartDate == null) || (dataSearch.currentDate >= e.StartDate)
+                                                        && (dataSearch.currentDate <= e.EndDate))
                             &&
                             ((e.IDProcessLeader == null) || (e.IDProcessLeader == dataSearch.idProcessLeader))
                             &&
                             ((e.CdDivisions == null) || (e.CdDivisions == dataSearch.cdDivisions))
                         )
-                .ToList();
+                .ToListAsync();
         }
 
         public IQueryable<Evaluations> GetEvaluationsInclude()

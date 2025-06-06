@@ -5,7 +5,7 @@ namespace EvaluacionDesempenoApi.Data.Repositories
 {
     public interface IQuestionariesConfigRepository
     {
-        List<QuestionariesConfig> GetByQuestionaryIncludes(int idQuestionary);
+        Task<List<QuestionariesConfig>> GetByQuestionaryIncludes(int idQuestionary);
         List<QuestionariesConfig> GetByQuestionaryIncludesComplete(int idQuestionary);
         QuestionariesConfig GetByIdIncludes(int id);
         List<QuestionariesConfig> GetByIdQuestionary(int idQuestionary);

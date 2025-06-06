@@ -142,14 +142,29 @@ namespace EvaluacionDesempenoApi.Data.Context
                  .HasForeignKey(m => m.IdEvaluations);
 
                 modelBuilder.Entity<EvaluationRecord>()
-             .HasOne(er => er.Evaluator)
-             .WithMany(e => e.EvaluationsAsEvaluator)
-             .HasForeignKey(er => er.IdEvaluator); // O la opción que prefieras
+                 .HasOne(er => er.Evaluator)
+                 .WithMany(e => e.EvaluationsAsEvaluator)
+                 .HasForeignKey(er => er.IdEvaluator); 
 
                 modelBuilder.Entity<EvaluationRecord>()
                     .HasOne(er => er.Employee)
                     .WithMany(e => e.EvaluationsAsEmployee)
                     .HasForeignKey(er => er.IdEmployee);
+
+                modelBuilder.Entity<EvaluationRecord>()
+                    .HasOne(er => er.Areas)
+                    .WithMany(e => e.EvaluationRecord)
+                    .HasForeignKey(er => er.CdArea);
+
+                modelBuilder.Entity<EvaluationRecord>()
+                   .HasOne(er => er.Positions)
+                   .WithMany(e => e.EvaluationRecord)
+                   .HasForeignKey(er => er.IdPosition);
+
+                modelBuilder.Entity<EvaluationRecord>()
+                   .HasOne(er => er.Divisions)
+                   .WithMany(e => e.EvaluationRecord)
+                   .HasForeignKey(er => er.CdDivisions);
 
                 modelBuilder.Entity<EvaluationsPositions>()
                    .HasOne(m => m.Evaluations)
@@ -212,6 +227,11 @@ namespace EvaluacionDesempenoApi.Data.Context
                     .HasOne(e => e.QuestionaryTypes)
                     .WithMany(e => e.Questionaries)
                     .HasForeignKey(e => e.CdQuestionaryType);
+
+                modelBuilder.Entity<Employees>()
+                 .HasOne(d => d.Areas)
+                 .WithMany(t => t.Employees)
+                 .HasForeignKey(d => d.CdArea);
 
 
                 modelBuilder.Entity<Employees>()

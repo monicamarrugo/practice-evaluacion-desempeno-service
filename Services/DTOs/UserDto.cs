@@ -2,6 +2,8 @@
 {
     public class UserDto
     {
+        public int id { get; set; }
+        public int? idEmployee { get; set; }
         public string username { get; set; }
         public string altName { get; set; }
         public string altEmail { get; set; }

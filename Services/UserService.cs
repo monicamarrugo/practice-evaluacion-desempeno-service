@@ -1,4 +1,5 @@
-﻿using Azure;
+﻿using AutoMapper;
+using Azure;
 using Azure.Core;
 using EvaluacionDesempenoApi.Data.Repositories;
 using EvaluacionDesempenoApi.Models.Entities;
@@ -26,17 +27,23 @@ namespace EvaluacionDesempenoApi.Services
         private readonly IGenericRepository<UsersProfiles> _repository;
         private readonly IUsersProfilesRepository _usersProfilesRepository;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
+        private readonly ILogger<UserService> _logger;
         public UserService(UserManager<ApplicationUser> userManager,
             IEncryptionService encryptionService,
             IGenericRepository<UsersProfiles> repository,
             IUsersProfilesRepository usersProfilesRepository,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IMapper mapper,
+            ILogger<UserService> logger)
         {
             _userManager = userManager;
             _encryptionService = encryptionService;
             _repository = repository;
             _usersProfilesRepository = usersProfilesRepository;
             _configuration = configuration;
+            _mapper = mapper;
+            _logger = logger;
         }
         public async Task<UserDto> GetUserById(int id)
         {
@@ -108,6 +115,7 @@ namespace EvaluacionDesempenoApi.Services
 
             try
             {
+
                 var user = new ApplicationUser
                 {
                     UserName = registerDto.username,
@@ -117,9 +125,11 @@ namespace EvaluacionDesempenoApi.Services
                     CdLanguage = registerDto.cdLanguage,
                     IdEmployee = registerDto.idEmployee,
                     IndChangePassword = registerDto.indChangePassword,
-                    IndEnabled = true
+                    IndEnabled = true,
+                    UsersProfiles = _mapper.Map<List<UsersProfiles>>(registerDto.usersProfiles) ,
                 };
-
+             
+                
                 var result = await _userManager.CreateAsync(user, registerDto.password);
 
                 if (!result.Succeeded)
@@ -144,13 +154,13 @@ namespace EvaluacionDesempenoApi.Services
             }
         }
 
-        public async Task<ResponseTransaction> UpdateUser(int id, UserDto userDto)
+        public async Task<ResponseTransaction> UpdateUser(UserDto userDto)
         {
             ResponseTransaction response = new ResponseTransaction();
             try
             {
 
-                var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
+                var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userDto.id);
                 if (user == null) {
                     throw new Exception("Usuario no encontrado");
                 }
@@ -171,7 +181,7 @@ namespace EvaluacionDesempenoApi.Services
                 }
                 else {
                     response.error = "NO";
-                    response.message = "Usuario actualizado exitosamentge!";
+                    response.message = "Usuario actualizado exitosamente!";
                   
                 }
                 return response;
@@ -227,6 +237,7 @@ namespace EvaluacionDesempenoApi.Services
 
         public async Task<ResponseTransaction> Login(UserLoginDto loginDto)
         {
+            _logger.LogInformation("Autenticando a " + loginDto.username);
             ResponseTransaction response = new ResponseTransaction();
             try
             {
@@ -238,10 +249,13 @@ namespace EvaluacionDesempenoApi.Services
                     response.errorDetail = "Credenciales Inválidas!";
                     return response;
                 }
+                if (!user.IndEnabled)
+                {
+                    response.error = "SI";
+                    response.errorDetail = "Usuario Inhabilitado!";
+                    return response;
+                }
 
-                // Cargar explícitamente la entidad relacionada Employees
-                //await _context.Entry(user).Reference(u => u.Employees).LoadAsync();
-                
 
                 var decryptedPassword = _encryptionService.Decrypt(loginDto.password);
                 loginDto.password =  decryptedPassword;
@@ -261,6 +275,7 @@ namespace EvaluacionDesempenoApi.Services
                 response.error = "NO";
                 response.response = token;
                 response.message = "Usuario verificado exitosamente!";
+                _logger.LogInformation("Usuario verificado exitosamente!" + user.UserName);
                 return response;
             }
             catch (Exception ex)
@@ -268,6 +283,7 @@ namespace EvaluacionDesempenoApi.Services
 
                 response.error = "SI";
                 response.errorDetail = ex.Message;
+                _logger.LogError(ex.Message, ex);
                 return response;
             }
 
@@ -332,6 +348,8 @@ namespace EvaluacionDesempenoApi.Services
                 if (user != null)
                 {
                     userDto = new UserDto();
+                    userDto.id = user.Id;
+                    userDto.idEmployee = user.IdEmployee;
                     userDto.username = user.UserName;
                     userDto.altName = user.AltName;
                     userDto.altEmail = user.AltEmail;

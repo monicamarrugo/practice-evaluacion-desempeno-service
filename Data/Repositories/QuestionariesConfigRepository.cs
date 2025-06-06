@@ -21,12 +21,17 @@ namespace EvaluacionDesempenoApi.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public List<QuestionariesConfig> GetByQuestionaryIncludes(int idQuestionary)
+        public async Task<List<QuestionariesConfig>> GetByQuestionaryIncludes(int idQuestionary)
         {
-            return _dbContext.QuestionariesConfig.Include(p => p.Questions)
+            List<QuestionariesConfig> listQuestion = null;
+            if (idQuestionary > 0)
+            {
+                listQuestion = await _dbContext.QuestionariesConfig.Include(p => p.Questions)
                 .ThenInclude(d => d.QuestionGroupRelations)
                 .ThenInclude(s => s.Groups)
-                .Where( q=> q.IdQuestionary == idQuestionary).ToList();
+                .Where(q => q.IdQuestionary == idQuestionary).ToListAsync();
+            }
+            return listQuestion;
         }
 
         public List<QuestionariesConfig> GetByIdQuestionary(int idQuestionary)

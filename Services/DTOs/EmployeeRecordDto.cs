@@ -10,6 +10,10 @@
         public string email { get; set;} 
         public string nameDivisions { get; set;}
         public string namePosition { get; set;}
+        public string? nameArea { get; set; }
+        public string? cdArea { get; set; }
+        public string? cdDivisions { get; set; }
+        public int idPosition { get; set; }
         public bool existsRecord { get; set; }
 
         public int? idRecordEvaluation { get; set; }

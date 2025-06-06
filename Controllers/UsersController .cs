@@ -33,24 +33,24 @@ namespace EvaluacionDesempenoApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var usuario = _userService.GetUserById(id);
+            var usuario = await _userService.GetUserById(id);
 
             return Ok(usuario);
         }
 
         // PUT: api/Users/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, UserDto userDto)
+        [HttpPost("updateUser")]
+        public async Task<IActionResult> UpdateUser(UserDto userDto)
         {
 
-            var responseCreate = _userService.UpdateUser(id, userDto);
+            var responseCreate = await  _userService.UpdateUser(userDto);
             return Ok(responseCreate);
         }
         [Authorize]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {
-            var responseCreate = _userService.ChangePassword(changePasswordDto);
+            var responseCreate = await _userService.ChangePassword(changePasswordDto);
             return Ok(responseCreate);
         }
 
@@ -72,7 +72,7 @@ namespace EvaluacionDesempenoApi.Controllers
         [HttpGet("userByEmployee/{idEmployee}")]
         public async Task<IActionResult> GetUserByEmployeeId(int idEmployee)
         {
-            var usuario = _userService.GetUserByEmployeeId(idEmployee);
+            var usuario = await _userService.GetUserByEmployeeId(idEmployee);
 
             return Ok(usuario);
         }

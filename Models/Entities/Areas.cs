@@ -18,5 +18,13 @@ namespace EvaluacionDesempenoApi.Models.Entities
 
         [JsonIgnore]
         public ICollection<Questionaries> Questionaries { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Employees> Employees { get; set; }
+
+        [JsonIgnore]
+        public ICollection<EvaluationRecord> EvaluationRecord { get; set; }
+
+        
     }
 }

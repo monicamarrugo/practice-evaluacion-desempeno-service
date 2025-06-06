@@ -13,7 +13,11 @@ namespace EvaluacionDesempenoApi.Models.Entities
         public int? IdEmployee { get; set;}
         public int IdEvaluations { get; set;}
         public DateTimeOffset? StartDate { get; set;}
+        public DateTimeOffset? StartDateLocal { get; set; }
         public DateTimeOffset? EndDate { get; set;}
+        public DateTimeOffset? EndDateLocal { get; set; }
+
+        public string? TimeZone { get; set;}
         public string? CdEvaluationStates { get; set;}
         public decimal? FinalCalification { get; set;}
 
@@ -30,6 +34,14 @@ namespace EvaluacionDesempenoApi.Models.Entities
         public string? DescriptionFlag { get; set;}
 
         public string? ColorFlag { get; set;}
+        public string CdArea { get; set; }
+        public Areas Areas{ get; set;}
+
+        public string? CdDivisions { get; set; }
+        public Divisions Divisions { get; set; }
+        public int? IdPosition { get; set; }
+        public Positions Positions { get; set; }
+
         public Employees Evaluator { get; set; }
         public Employees Employee { get; set; }
         public Evaluations Evaluation { get; set; }

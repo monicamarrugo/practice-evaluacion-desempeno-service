@@ -9,7 +9,7 @@ namespace EvaluacionDesempenoApi.Services.Interfaces
 
         Task<UserDto> GetUserById(int id);
 
-        Task<ResponseTransaction> UpdateUser(int id, UserDto userDto);
+        Task<ResponseTransaction> UpdateUser(UserDto userDto);
 
         Task<ResponseTransaction> ChangePassword(ChangePasswordDto changePasswordDto);
         Task<ResponseTransaction> Login(UserLoginDto loginDto);
