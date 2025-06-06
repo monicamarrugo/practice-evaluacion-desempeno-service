@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Azure;
 using EvaluacionDesempenoApi.Data.Repositories;
-using EvaluacionDesempenoApi.Models.Entities;
-using EvaluacionDesempenoApi.Services.DTOs;
+using EvaluacionDesempenoApi.DTOs;
+using EvaluacionDesempenoApi.Entities;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

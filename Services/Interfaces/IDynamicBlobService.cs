@@ -1,5 +1,5 @@
 ﻿using Azure.Storage.Blobs;
-using EvaluacionDesempenoApi.Services.DTOs;
+using EvaluacionDesempenoApi.DTOs;
 using System.Threading.Tasks;
 
 namespace EvaluacionDesempenoApi.Services.Interfaces

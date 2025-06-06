@@ -105,3 +105,13 @@ D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApi\bi
 D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApi\bin\Debug\net6.0\System.Text.Encodings.Web.dll
 D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApi\bin\Debug\net6.0\System.Text.Json.dll
 D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApi\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
+D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApiPractice\obj\Debug\net6.0\EvaluacionDesempenoApi.csproj.AssemblyReference.cache
+D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApiPractice\obj\Debug\net6.0\EvaluacionDesempenoApi.GeneratedMSBuildEditorConfig.editorconfig
+D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApiPractice\obj\Debug\net6.0\EvaluacionDesempenoApi.AssemblyInfoInputs.cache
+D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApiPractice\obj\Debug\net6.0\EvaluacionDesempenoApi.AssemblyInfo.cs
+D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApiPractice\obj\Debug\net6.0\EvaluacionDesempenoApi.csproj.CoreCompileInputs.cache
+D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApiPractice\obj\Debug\net6.0\EvaluacionDesempenoApi.MvcApplicationPartsAssemblyInfo.cs
+D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApiPractice\obj\Debug\net6.0\EvaluacionDesempenoApi.MvcApplicationPartsAssemblyInfo.cache
+D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApiPractice\obj\Debug\net6.0\EvaluacionDesempenoApi.dll
+D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApiPractice\obj\Debug\net6.0\refint\EvaluacionDesempenoApi.dll
+D:\Jobs\TAGH\Evaluacion de Desempeño\Software\Backend\EvaluacionDesempenoApiPractice\obj\Debug\net6.0\EvaluacionDesempenoApi.pdb

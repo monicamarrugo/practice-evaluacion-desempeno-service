@@ -1,4 +1,4 @@
-﻿using EvaluacionDesempenoApi.Services.DTOs;
+﻿using EvaluacionDesempenoApi.DTOs;
 
 namespace EvaluacionDesempenoApi.Services.Interfaces
 {

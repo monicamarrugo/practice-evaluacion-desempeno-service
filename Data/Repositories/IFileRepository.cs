@@ -1,4 +1,4 @@
-﻿using EvaluacionDesempenoApi.Models.Entities;
+﻿using EvaluacionDesempenoApi.Entities;
 
 namespace EvaluacionDesempenoApi.Data.Repositories
 {

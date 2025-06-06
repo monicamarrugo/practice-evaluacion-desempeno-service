@@ -1,8 +1,8 @@
-﻿using EvaluacionDesempenoApi.Models.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
+using EvaluacionDesempenoApi.Entities;
 
 namespace EvaluacionDesempenoApi.Data.Context
 {

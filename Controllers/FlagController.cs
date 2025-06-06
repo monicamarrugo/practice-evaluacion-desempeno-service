@@ -1,4 +1,4 @@
-﻿using EvaluacionDesempenoApi.Services.DTOs;
+﻿using EvaluacionDesempenoApi.DTOs;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

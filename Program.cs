@@ -3,7 +3,7 @@ using Azure.Storage.Blobs;
 using EvaluacionDesempenoApi.Data.Context;
 using EvaluacionDesempenoApi.Data.Repositories;
 using EvaluacionDesempenoApi.Mappers;
-using EvaluacionDesempenoApi.Models.Entities;
+using EvaluacionDesempenoApi.Entities;
 using EvaluacionDesempenoApi.Services;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;

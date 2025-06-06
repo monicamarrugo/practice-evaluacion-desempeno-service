@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using EvaluacionDesempenoApi.Data.Context;
-using EvaluacionDesempenoApi.Models.Entities;
-using EvaluacionDesempenoApi.Services.DTOs;
+using EvaluacionDesempenoApi.DTOs;
+using EvaluacionDesempenoApi.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EvaluacionDesempenoApi.Data.Repositories
-{  
+{
     public class FlagRepository : IFlagRepository
     {
         private readonly ApplicationDbContext _dbContext;

@@ -1,6 +1,6 @@
 ﻿using EvaluacionDesempenoApi.Data.Context;
-using EvaluacionDesempenoApi.Models.Entities;
-using EvaluacionDesempenoApi.Services.DTOs;
+using EvaluacionDesempenoApi.DTOs;
+using EvaluacionDesempenoApi.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

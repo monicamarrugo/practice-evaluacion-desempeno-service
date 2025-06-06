@@ -1,6 +1,6 @@
-﻿using EvaluacionDesempenoApi.Models.Entities;
+﻿using EvaluacionDesempenoApi.DTOs;
+using EvaluacionDesempenoApi.Entities;
 using EvaluacionDesempenoApi.Services;
-using EvaluacionDesempenoApi.Services.DTOs;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

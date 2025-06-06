@@ -1,4 +1,4 @@
-﻿using EvaluacionDesempenoApi.Services.DTOs;
+﻿using EvaluacionDesempenoApi.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

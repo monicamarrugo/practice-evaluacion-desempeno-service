@@ -1,4 +1,4 @@
-﻿using EvaluacionDesempenoApi.Models.Entities;
+﻿using EvaluacionDesempenoApi.Entities;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;

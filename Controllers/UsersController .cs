@@ -1,5 +1,5 @@
-﻿using EvaluacionDesempenoApi.Models.Entities;
-using EvaluacionDesempenoApi.Services.DTOs;
+﻿using EvaluacionDesempenoApi.DTOs;
+using EvaluacionDesempenoApi.Entities;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,13 +21,7 @@ namespace EvaluacionDesempenoApi.Controllers
             _userService = userService; 
             _languageService = languageService;
         }
-        [Authorize]
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(UserRegisterDto registerDto)
-        {
-            var responseCreate = await _userService.Register(registerDto);
-            return Ok(responseCreate);
-        }   
+        
 
         // GET: api/Users/{id}
         [HttpGet("{id}")]
@@ -54,12 +48,7 @@ namespace EvaluacionDesempenoApi.Controllers
             return Ok(responseCreate);
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(UserLoginDto loginDto)
-        {
-            var responseLogin = await _userService.Login(loginDto);
-            return Ok(responseLogin);
-        }
+        
 
         [HttpGet("listLanguages")]
         public IActionResult GetListLanguages()

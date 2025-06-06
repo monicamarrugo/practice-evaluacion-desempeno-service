@@ -2,8 +2,8 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using EvaluacionDesempenoApi.Data.Repositories;
-using EvaluacionDesempenoApi.Models.Entities;
-using EvaluacionDesempenoApi.Services.DTOs;
+using EvaluacionDesempenoApi.DTOs;
+using EvaluacionDesempenoApi.Entities;
 using EvaluacionDesempenoApi.Services.Enums;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using Microsoft.Extensions.Configuration;

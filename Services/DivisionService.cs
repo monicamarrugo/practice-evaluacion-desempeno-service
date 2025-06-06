@@ -1,5 +1,5 @@
 ﻿using EvaluacionDesempenoApi.Data.Repositories;
-using EvaluacionDesempenoApi.Models.Entities;
+using EvaluacionDesempenoApi.Entities;
 using EvaluacionDesempenoApi.Services.Interfaces;
 
 namespace EvaluacionDesempenoApi.Services

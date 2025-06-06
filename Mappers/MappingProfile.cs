@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using EvaluacionDesempenoApi.Models.Entities;
-using EvaluacionDesempenoApi.Services.DTOs;
+using EvaluacionDesempenoApi.DTOs;
+using EvaluacionDesempenoApi.Entities;
 
 namespace EvaluacionDesempenoApi.Mappers
 {

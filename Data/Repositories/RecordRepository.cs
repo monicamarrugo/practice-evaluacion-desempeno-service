@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using EvaluacionDesempenoApi.Data.Context;
-using EvaluacionDesempenoApi.Models.Entities;
-using EvaluacionDesempenoApi.Services.DTOs;
+using EvaluacionDesempenoApi.DTOs;
+using EvaluacionDesempenoApi.Entities;
 using EvaluacionDesempenoApi.Services.Enums;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;

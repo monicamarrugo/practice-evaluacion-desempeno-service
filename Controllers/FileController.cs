@@ -2,9 +2,9 @@
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using EvaluacionDesempenoApi.Services;
-using EvaluacionDesempenoApi.Services.DTOs;
 using EvaluacionDesempenoApi.Services.Interfaces;
 using System.Text.Json;
+using EvaluacionDesempenoApi.DTOs;
 
 namespace EvaluacionDesempenoApi.Controllers
 {

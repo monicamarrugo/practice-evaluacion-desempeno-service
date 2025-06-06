@@ -1,5 +1,5 @@
 ﻿using EvaluacionDesempenoApi.Data.Context;
-using EvaluacionDesempenoApi.Models.Entities;
+using EvaluacionDesempenoApi.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
